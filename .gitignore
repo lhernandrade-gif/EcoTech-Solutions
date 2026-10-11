@@ -1,4 +1,3 @@
 # created by virtualenv automatically
 .venv/
 .env
-sh -T git@github.com

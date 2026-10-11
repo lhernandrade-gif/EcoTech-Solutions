@@ -2,6 +2,7 @@ import os
 import pymysql
 from dotenv import load_dotenv
 from datetime import date
+from typing import Any
 
 class BaseDatos:
     def __init__(self, host, user, password, database):
@@ -76,7 +77,7 @@ class EmpleadoRepositorio:
             cursor.execute('''SELECT id, primer_nombre, segundo_nombre, primer_apellido, segundo_apellido, rut, direccion, telefono, email, fecha_inicio_contrato, salario
                               FROM empleados
                               WHERE id = %s''', (empleado.empleado_id,))
-            fila: tuple = cursor.fetchone()
+            fila: tuple[Any,...] | None = cursor.fetchone()
             if fila is None: return None
             return Empleado(empleado_id=fila[0], primer_nombre=fila[1], segundo_nombre=fila[2], primer_apellido=fila[3], segundo_apellido=fila[4], rut=fila[5], direccion=fila[6], telefono=fila[7], email=fila[8], fecha_inicio_contrato=fila[9], salario=fila[10])
 
@@ -96,8 +97,8 @@ class EmpleadoRepositorio:
             conexion.commit()
 
 load_dotenv()
-sesion = BaseDatos(os.getenv("DB_HOST"), os.getenv("DB_USER"), os.getenv("DB_PASSWORD"), os.getenv("DB_NAME"))
-empleado_repositorio = EmpleadoRepositorio(sesion)
+sesion_actual = BaseDatos(os.getenv("DB_HOST"), os.getenv("DB_USER"), os.getenv("DB_PASSWORD"), os.getenv("DB_NAME"))
+empleado_repositorio = EmpleadoRepositorio(sesion_actual)
 empleado_test = Empleado(empleado_id = 1)
 empleado_test = empleado_repositorio.buscar_por_id(empleado_test)
 print(empleado_test.primer_nombre)
