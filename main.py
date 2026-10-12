@@ -4,6 +4,7 @@ from dotenv import load_dotenv
 from datetime import date
 from typing import Any
 import clases
+import utilidades
 
 def main():
     load_dotenv()
@@ -11,7 +12,7 @@ def main():
     empleado_repositorio = clases.EmpleadoRepositorio(sesion_actual)
     empleado_test = clases.Empleado(empleado_id = 1)
     empleado_test = empleado_repositorio.buscar_por_id(empleado_test)
-    print(empleado_test.primer_nombre)
+    utilidades.mostrar_datos(empleado_test)
 
 #El siguiente código permitiría crear el esquema de la BD durante la ejecución del programa
 """
