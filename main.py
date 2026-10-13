@@ -7,12 +7,12 @@ import clases
 import utilidades
 
 def main():
-    load_dotenv()
-    sesion_actual = clases.BaseDatos(os.getenv("DB_HOST"), os.getenv("DB_USER"), os.getenv("DB_PASSWORD"), os.getenv("DB_NAME"))
-    empleado_repositorio = clases.EmpleadoRepositorio(sesion_actual)
-    empleado_test = clases.Empleado(empleado_id = 1)
-    empleado_test = empleado_repositorio.buscar_por_id(empleado_test)
-    utilidades.mostrar_datos(empleado_test)
+     load_dotenv()
+     sesion_actual = clases.BaseDatos(os.getenv("DB_HOST"), os.getenv("DB_USER"), os.getenv("DB_PASSWORD"), os.getenv("DB_NAME"))
+     empleado_repositorio = clases.EmpleadoRepositorio(sesion_actual)
+     empleado_test = clases.Empleado(empleado_id = 1)
+     empleado_test = empleado_repositorio.buscar_por_id(empleado_test)
+     utilidades.mostrar_datos(empleado_test)
 
 #El siguiente código permitiría crear el esquema de la BD durante la ejecución del programa
 """
@@ -40,7 +40,6 @@ def inicializar_base_de_datos(connection):
 
     connection.commit()
 """
-
 
 if __name__ == "__main__":
     main()
