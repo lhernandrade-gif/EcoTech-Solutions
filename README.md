@@ -9,14 +9,7 @@ Antes de ejecutar esta aplicación, debes tener **MySQL Server** instalado y eje
 
 ### 2. Configurar la Base de Datos
 1. Asegúrate de que el servicio de MySQL se esté ejecutando.
-2. Crea una nueva base de datos para este proyecto:
-   ```sql
-   CREATE DATABASE mi_proyecto_db
-    CHARACTER SET utf8mb4 -- Establece compatibilidad extendida con caracteres Unicode
-    COLLATE utf8mb4_0900_ai_ci; -- Esta línea permite comparar valores sin importar las tildes o capitalización (por ej. un usuario que busca "jose" puede encontrar "José")
-
-   USE mi_proyecto_db;
-   ```
+2. Ejecuta en MySQL el script `schema.sql`. Esto creará la base de datos del programa e insertará valores de prueba.
 
 ### 3. Configuración del Entorno
 Crea un archivo llamado `.env` en el directorio raíz del proyecto y agrega las credenciales de tu base de datos:
