@@ -1,12 +1,14 @@
 def mostrar_datos(objeto) -> None:
-    print(type(objeto))
+    lista = []
     if isinstance(objeto, list):
         for dict in objeto:
             for clave, valor in dict.items():
-                print(f"{clave}: {valor}")
+                print(f"{clave}: {valor}", end=" ")
     else:
         for clave, valor in vars(objeto).items():
-            print(f"{clave}: {valor}")
+            #print(f"{clave}: {valor}", end=" ")
+            lista.append((clave, valor))
+    return lista
 
 def generar_informe():
     pass

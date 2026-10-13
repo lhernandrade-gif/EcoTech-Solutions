@@ -3,15 +3,21 @@ Interfaz visual de EcoTech Solutions.
 La interfaz no ejecuta consultas ni llama a los repositorios todavía.
 Completa los métodos marcados como TODO cuando quieras conectar la lógica.
 """
-
+import os
+from dotenv import load_dotenv
 import tkinter as tk
 from tkinter import ttk
 from datetime import date
-
+import utilidades
+import clases
+from clases import Empleado, Departamento, Proyecto, RegistroTiempo, BaseDatos, EmpleadoRepositorio, DepartamentoRepositorio, ProyectoRepositorio, RegistroTiempoRepositorio
 
 # Campos que se mostrarán en los formularios.
 # Las claves son nombres visibles; los valores son los nombres de atributos
 # de las clases/modelos para facilitar la futura conexión con los repositorios.
+load_dotenv()
+sesion_actual = clases.BaseDatos(os.getenv("DB_HOST"), os.getenv("DB_USER"), os.getenv("DB_PASSWORD"), os.getenv("DB_NAME"))
+
 ENTIDADES = {
     "Empleados": [
         ("Primer nombre", "primer_nombre"),
@@ -52,6 +58,9 @@ IDS = {
     "Registros de tiempo": "registro_tiempo_id",
 }
 
+CLASES = {"Empleados": Empleado, "Departamentos": Departamento, "Proyectos": Proyecto, "Registros de tiempo": RegistroTiempo}
+
+REPOSITORIOS = {"Empleados": EmpleadoRepositorio, "Departamentos": DepartamentoRepositorio, "Proyectos": ProyectoRepositorio, "Registros de tiempo": RegistroTiempoRepositorio}
 
 class EcoTechApp:
     def __init__(self, root):
@@ -176,9 +185,23 @@ class EcoTechApp:
         def guardar_visual():
             # TODO: leer entradas, convertir tipos y llamar al Repositorio correspondiente.
             # Ejemplo futuro: repositorio.crear(objeto_entidad)
+            #self.registrar_log(
+            #    f"Formulario de ingreso preparado para {entidad.get()}; lógica CRUD pendiente."
+            datos_finales = {}
+            for atributo, entrada in entradas.items():
+                if entrada.get() == "":
+                    datos_finales[atributo] = [None,]
+                else:
+                    datos_finales[atributo] = entrada.get()
+            clase = CLASES[entidad.get()]
+            objeto = clase(**datos_finales)
+            clase_repositorio = REPOSITORIOS[entidad.get()]
+            objeto_repositorio = clase_repositorio(sesion_actual)
+            objeto_repositorio.guardar(objeto)
             self.registrar_log(
-                f"Formulario de ingreso preparado para {entidad.get()}; lógica CRUD pendiente."
+                    f"{sesion_actual}"
             )
+
 
         dibujar_campos()
         ttk.Button(marco, text="Guardar", command=guardar_visual).pack(anchor="e", pady=(12, 0))

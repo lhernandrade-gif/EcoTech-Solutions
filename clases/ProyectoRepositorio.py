@@ -45,7 +45,7 @@ class ProyectoRepositorio:
             for empleado in proyecto.lista_empleados:
                 cursor.execute('''UPDATE proyecto_empleados
                                   SET proyecto_id = %s,
-                                      empleado_id     = %s
+                                      empleado_id = %s
                                ''', (proyecto.proyecto_id, empleado))
             conexion.commit()
 
