@@ -7,6 +7,7 @@ import os
 from dotenv import load_dotenv
 import tkinter as tk
 from tkinter import ttk
+import pymysql
 from datetime import date
 import utilidades
 import clases
@@ -132,7 +133,7 @@ class EcoTechApp:
 
     def registrar_log(self, mensaje):
         """Actualiza la barra de estado inferior."""
-        self.log_var.set(f"LOG: {mensaje}")
+        self.log_var.set(f"[LOG] {mensaje}")
 
     def _nueva_ventana(self, titulo, geometria="560x520"):
         ventana = tk.Toplevel(self.root)
@@ -197,9 +198,11 @@ class EcoTechApp:
             objeto = clase(**datos_finales)
             clase_repositorio = REPOSITORIOS[entidad.get()]
             objeto_repositorio = clase_repositorio(sesion_actual)
-            objeto_repositorio.guardar(objeto)
-            self.registrar_log(
-                    f"{sesion_actual}"
+            try:
+                objeto_repositorio.guardar(objeto)
+            except pymysql.err.IntegrityError as e:
+                self.registrar_log(
+                    f"ERROR: Se intentó ingresar un valor que no puede estar vacío. Por favor, completar todos los campos. Código de excepción: {e}"
             )
 
 
