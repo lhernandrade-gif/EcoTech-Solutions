@@ -17,7 +17,7 @@ USE ecotech;
 -- ============================================================
 
 CREATE TABLE empleados (
-    id INT AUTO_INCREMENT PRIMARY KEY,
+    empleado_id INT AUTO_INCREMENT PRIMARY KEY,
 
     primer_nombre VARCHAR(50) NOT NULL,
     segundo_nombre VARCHAR(50),
@@ -160,7 +160,7 @@ CREATE TABLE proyecto_empleados (
 
     CONSTRAINT fk_proyecto_empleados_empleado
         FOREIGN KEY (empleado_id)
-        REFERENCES empleados(id)
+        REFERENCES empleados(empleado_id)
         ON DELETE CASCADE
 );
 
@@ -233,7 +233,7 @@ SELECT
     p.proyecto_id,
     p.nombre AS proyecto,
     p.fecha_proyecto,
-    e.id AS empleado_id,
+    e.empleado_id AS empleado_id,
     CONCAT(
         e.primer_nombre, ' ',
         e.primer_apellido, ' ',
@@ -243,8 +243,8 @@ FROM proyectos p
 LEFT JOIN proyecto_empleados pe
     ON p.proyecto_id = pe.proyecto_id
 LEFT JOIN empleados e
-    ON pe.empleado_id = e.id
-ORDER BY p.proyecto_id, e.id;
+    ON pe.empleado_id = e.empleado_id
+ORDER BY p.proyecto_id, e.empleado_id;
 
 -- ============================================================
 -- Tabla: departamentos
@@ -262,7 +262,7 @@ CREATE TABLE departamentos (
 
     CONSTRAINT fk_departamentos_gerente
         FOREIGN KEY (gerente)
-        REFERENCES empleados(id)
+        REFERENCES empleados(empleado_id)
         ON DELETE SET NULL
 );
 
@@ -287,7 +287,7 @@ CREATE TABLE departamento_empleados (
 
     CONSTRAINT fk_departamento_empleados_empleado
         FOREIGN KEY (empleado_id)
-        REFERENCES empleados(id)
+        REFERENCES empleados(empleado_id)
         ON DELETE CASCADE
 );
 
@@ -344,7 +344,7 @@ SELECT
         g.primer_apellido, ' ',
         g.segundo_apellido
     ) AS gerente,
-    e.id AS empleado_id,
+    e.empleado_id AS empleado_id,
     CONCAT(
         e.primer_nombre, ' ',
         e.primer_apellido, ' ',
@@ -352,12 +352,12 @@ SELECT
     ) AS empleado
 FROM departamentos d
 LEFT JOIN empleados g
-    ON d.gerente = g.id
+    ON d.gerente = g.empleado_id
 LEFT JOIN departamento_empleados de
     ON d.departamento_id = de.departamento_id
 LEFT JOIN empleados e
-    ON de.empleado_id = e.id
-ORDER BY d.departamento_id, e.id;
+    ON de.empleado_id = e.empleado_id
+ORDER BY d.departamento_id, e.empleado_id;
 
 -- ============================================================
 -- Tabla: registro_tiempo
@@ -384,7 +384,7 @@ CREATE TABLE registro_tiempo (
 
     CONSTRAINT fk_registro_tiempo_empleado
         FOREIGN KEY (empleado_id)
-        REFERENCES empleados(id)
+        REFERENCES empleados(empleado_id)
         ON DELETE CASCADE,
 
     CONSTRAINT fk_registro_tiempo_proyecto
@@ -487,7 +487,7 @@ SELECT
     p.nombre AS proyecto
 FROM registro_tiempo rt
 INNER JOIN empleados e
-    ON rt.empleado_id = e.id
+    ON rt.empleado_id = e.empleado_id
 INNER JOIN proyectos p
     ON rt.proyecto_id = p.proyecto_id
 ORDER BY rt.fecha, rt.registro_tiempo_id;

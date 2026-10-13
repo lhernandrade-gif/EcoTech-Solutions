@@ -9,7 +9,7 @@ class RegistroTiempoRepositorio:
         with self.config.conectar() as conexion:
             cursor = conexion.cursor()
             cursor.execute('''
-                           INSERT INTO registrotiempo (fecha, horas_trabajadas, descripcion_tareas, id_empleado, id_proyecto)
+                           INSERT INTO registro_tiempo (fecha, horas_trabajadas, descripcion_tareas, empleado_id, proyecto_id)
                            VALUES (%s, %s, %s, %s, %s)
                            ''', (registro_tiempo.fecha, registro_tiempo.horas_trabajadas, registro_tiempo.descripcion_tareas, registro_tiempo.empleado_id, registro_tiempo.proyecto_id))
             conexion.commit()
@@ -21,9 +21,9 @@ class RegistroTiempoRepositorio:
     def buscar_por_id(self, registro_tiempo: RegistroTiempo) -> RegistroTiempo:
         with self.config.conectar() as conexion:
             cursor = conexion.cursor()
-            cursor.execute('''SELECT id, fecha, horas_trabajadas, descripcion_tareas, id_empleado, id_proyecto
-                              FROM registrotiempo
-                              WHERE id = %s''', (registro_tiempo.registro_tiempo_id,))
+            cursor.execute('''SELECT registro_tiempo_id, fecha, horas_trabajadas, descripcion_tareas, empleado_id, proyecto_id
+                              FROM registro_tiempo
+                              WHERE registro_tiempo_id = %s''', (registro_tiempo.registro_tiempo_id,))
             fila: tuple[Any,...] | None = cursor.fetchone()
             if fila is None: return None
             return RegistroTiempo(registro_tiempo_id=fila[0], fecha=fila[1], horas_trabajadas=fila[2], descripcion_tareas=fila[3], id_empleado=fila[4], id_proyecto=fila[5])
@@ -31,14 +31,14 @@ class RegistroTiempoRepositorio:
     def actualizar(self, registro_tiempo: RegistroTiempo) -> None:
         with self.config.conectar() as conexion:
             cursor = conexion.cursor()
-            cursor.execute('''UPDATE empleados
-                              SET fecha = %s, horas_trabajadas = %s, descripcion_tareas = %s, id_empleado = %s, id_proyecto = %s
-                              WHERE id = %s''',
+            cursor.execute('''UPDATE registro_tiempo
+                              SET fecha = %s, horas_trabajadas = %s, descripcion_tareas = %s, empleado_id = %s, proyecto_id = %s
+                              WHERE registro_tiempo_id = %s''',
                            (registro_tiempo.fecha, registro_tiempo.horas_trabajadas, registro_tiempo.descripcion_tareas, registro_tiempo.empleado_id, registro_tiempo.proyecto_id, registro_tiempo.registro_tiempo_id))
             conexion.commit()
 
     def eliminar(self, registro_tiempo: RegistroTiempo) -> None:
         with self.config.conectar() as conexion:
             cursor = conexion.cursor()
-            cursor.execute('DELETE FROM registro_tiempo WHERE id = %s', (registro_tiempo.registro_tiempo_id,))
+            cursor.execute('DELETE FROM registro_tiempo WHERE registro_tiempo_id = %s', (registro_tiempo.registro_tiempo_id,))
             conexion.commit()
