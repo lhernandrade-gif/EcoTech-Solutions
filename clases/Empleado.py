@@ -1,4 +1,5 @@
 from datetime import date
+from clases import RegistroTiempo
 
 class Empleado:
     def __init__(
