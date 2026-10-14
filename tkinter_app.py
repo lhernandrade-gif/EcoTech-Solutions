@@ -120,10 +120,10 @@ class EcoTechApp:
             command=self.abrir_eliminar
         ).grid(row=1, column=1, padx=20, pady=12)
 
-        ttk.Button(
-            zona, text="Generar Informe", style="Accion.TButton",
-            command=self.abrir_informe
-        ).grid(row=2, column=0, columnspan=2, padx=20, pady=12)
+        #ttk.Button(
+        #    zona, text="Generar Informe", style="Accion.TButton",
+        #    command=self.abrir_informe
+        #).grid(row=2, column=0, columnspan=2, padx=20, pady=12)
 
         self.log_var = tk.StringVar(value="LOG: Programa inicializado con éxito.")
         barra = ttk.Label(
@@ -311,7 +311,7 @@ class EcoTechApp:
             else:
                 try:
                     datos_finales = {}
-                    datos_finales[IDS[entidad.get()]] = id_var.get()
+                    datos_finales[IDS[entidad.get()]] = int(id_var.get())
                     print(datos_finales)
                     clase = CLASES[entidad.get()]
                     objeto = clase(**datos_finales)
