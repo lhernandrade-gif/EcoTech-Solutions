@@ -1,5 +1,6 @@
 from typing import Any
 from .Empleado import Empleado
+from .BaseDatos import BaseDatos
 
 class EmpleadoRepositorio:
     def __init__(self, sesion: BaseDatos) -> None:
@@ -38,7 +39,10 @@ class EmpleadoRepositorio:
             conexion.commit()
 
     def eliminar(self, empleado: Empleado) -> None:
+        print("Se entra al método Empleado.eliminar")
+        print(empleado.empleado_id)
         with self.config.conectar() as conexion:
             cursor = conexion.cursor()
-            cursor.execute('DELETE FROM empleados WHERE id = %s', (empleado.empleado_id,))
+            cursor.execute('DELETE FROM empleados WHERE empleado_id = %s', (empleado.empleado_id,))
+            print("Línea siguiente al .execute")
             conexion.commit()

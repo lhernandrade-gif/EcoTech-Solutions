@@ -1,5 +1,6 @@
 from typing import Any
 from .Departamento import Departamento
+import utilidades
 
 class DepartamentoRepositorio:
     def __init__(self, sesion: BaseDatos) -> None:
@@ -40,17 +41,21 @@ class DepartamentoRepositorio:
         with self.config.conectar() as conexion:
             cursor = conexion.cursor()
             cursor.execute('''UPDATE departamentos
-                              SET nombre = %s, gerente = %s,
+                              SET nombre = %s, gerente = %s
                               WHERE departamento_id = %s''',
                            (departamento.nombre, departamento.gerente, departamento.departamento_id))
+            cursor.execute('''DELETE
+                              FROM departamento_empleados
+                              WHERE departamento_id = %s''',
+                           (departamento.departamento_id,))
             for empleado in departamento.lista_empleados:
-                cursor.execute('''UPDATE departamento_empleados
-                                SET departamento_id = %s, empleado_id = %s
+                cursor.execute('''INSERT INTO departamento_empleados (departamento_id, empleado_id)
+                                  VALUES (%s, %s)
                                ''', (departamento.departamento_id, empleado))
             conexion.commit()
 
     def eliminar(self, departamento: Departamento) -> None:
         with self.config.conectar() as conexion:
             cursor = conexion.cursor()
-            cursor.execute('DELETE FROM departamentos WHERE id = %s', (departamento.departamento_id,))
+            cursor.execute('DELETE FROM departamentos WHERE departamento_id = %s', (departamento.departamento_id,))
             conexion.commit()
