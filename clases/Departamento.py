@@ -3,7 +3,7 @@ from clases import Empleado
 class Departamento:
     def __init__(
             self,
-            departamento_id: int | None,
+            departamento_id: int | None = None,
             nombre: str | None = None,
             gerente: int | None = None,
             lista_empleados: list[int] | None = None,

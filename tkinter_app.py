@@ -3,15 +3,23 @@ Interfaz visual de EcoTech Solutions.
 La interfaz no ejecuta consultas ni llama a los repositorios todavía.
 Completa los métodos marcados como TODO cuando quieras conectar la lógica.
 """
-
+import os
+from dotenv import load_dotenv
 import tkinter as tk
 from tkinter import ttk
+from tkinter import messagebox
+import pymysql
 from datetime import date
-
+import utilidades
+import clases
+from clases import Empleado, Departamento, Proyecto, RegistroTiempo, BaseDatos, EmpleadoRepositorio, DepartamentoRepositorio, ProyectoRepositorio, RegistroTiempoRepositorio
 
 # Campos que se mostrarán en los formularios.
 # Las claves son nombres visibles; los valores son los nombres de atributos
 # de las clases/modelos para facilitar la futura conexión con los repositorios.
+load_dotenv()
+sesion_actual = clases.BaseDatos(os.getenv("DB_HOST"), os.getenv("DB_USER"), os.getenv("DB_PASSWORD"), os.getenv("DB_NAME"))
+
 ENTIDADES = {
     "Empleados": [
         ("Primer nombre", "primer_nombre"),
@@ -52,6 +60,9 @@ IDS = {
     "Registros de tiempo": "registro_tiempo_id",
 }
 
+CLASES = {"Empleados": Empleado, "Departamentos": Departamento, "Proyectos": Proyecto, "Registros de tiempo": RegistroTiempo}
+
+REPOSITORIOS = {"Empleados": EmpleadoRepositorio, "Departamentos": DepartamentoRepositorio, "Proyectos": ProyectoRepositorio, "Registros de tiempo": RegistroTiempoRepositorio}
 
 class EcoTechApp:
     def __init__(self, root):
@@ -109,10 +120,10 @@ class EcoTechApp:
             command=self.abrir_eliminar
         ).grid(row=1, column=1, padx=20, pady=12)
 
-        ttk.Button(
-            zona, text="Generar Informe", style="Accion.TButton",
-            command=self.abrir_informe
-        ).grid(row=2, column=0, columnspan=2, padx=20, pady=12)
+        #ttk.Button(
+        #    zona, text="Generar Informe", style="Accion.TButton",
+        #    command=self.abrir_informe
+        #).grid(row=2, column=0, columnspan=2, padx=20, pady=12)
 
         self.log_var = tk.StringVar(value="LOG: Programa inicializado con éxito.")
         barra = ttk.Label(
@@ -123,7 +134,7 @@ class EcoTechApp:
 
     def registrar_log(self, mensaje):
         """Actualiza la barra de estado inferior."""
-        self.log_var.set(f"LOG: {mensaje}")
+        self.log_var.set(f"[LOG] {mensaje}")
 
     def _nueva_ventana(self, titulo, geometria="560x520"):
         ventana = tk.Toplevel(self.root)
@@ -174,10 +185,26 @@ class EcoTechApp:
                 entradas[atributo] = entrada
 
         def guardar_visual():
-            # TODO: leer entradas, convertir tipos y llamar al Repositorio correspondiente.
-            # Ejemplo futuro: repositorio.crear(objeto_entidad)
-            self.registrar_log(
-                f"Formulario de ingreso preparado para {entidad.get()}; lógica CRUD pendiente."
+            datos_finales = {}
+            for atributo, entrada in entradas.items():
+                if entrada.get() == "":
+                    datos_finales[atributo] = [None,]
+                else:
+                    datos_finales[atributo] = entrada.get()
+            clase = CLASES[entidad.get()]
+            objeto = clase(**datos_finales)
+            clase_repositorio = REPOSITORIOS[entidad.get()]
+            objeto_repositorio = clase_repositorio(sesion_actual)
+            try:
+                objeto_repositorio.guardar(objeto)
+                self.registrar_log(
+                    f"Información guardada con éxito.")
+            except pymysql.err.IntegrityError as e:
+                self.registrar_log(
+                    f"ERROR: Código de excepción: {e}")
+            except pymysql.MySQLError as e:
+                self.registrar_log(
+                    f"Error en la ejecución: {e}"
             )
 
         dibujar_campos()
@@ -235,15 +262,68 @@ class EcoTechApp:
                 entradas[atributo] = entrada
 
         def ejecutar():
+            datos_finales = {}
+            clase = CLASES[entidad.get()]
+            objeto = clase(**datos_finales)
+            clase_repositorio = REPOSITORIOS[entidad.get()]
+            objeto_repositorio = clase_repositorio(sesion_actual)
             if accion == "buscar":
-                # TODO: instanciar el repositorio y ejecutar buscar_por_id().
-                self.registrar_log(f"Búsqueda visual preparada para {entidad.get()} ID {id_var.get()}; lógica pendiente.")
+                try:
+                    datos_finales = {}
+                    datos_finales[IDS[entidad.get()]] = id_var.get()
+                    print(datos_finales)
+                    clase = CLASES[entidad.get()]
+                    objeto = clase(**datos_finales)
+                    clase_repositorio = REPOSITORIOS[entidad.get()]
+                    objeto_repositorio = clase_repositorio(sesion_actual)
+                    self.registrar_log(f"Búsqueda visual preparada para {entidad.get()} ID {id_var.get()}; lógica pendiente.")
+                    objeto = objeto_repositorio.buscar_por_id(objeto)
+                    messagebox.showinfo('Resultados de Búsqueda por ID', f'{utilidades.mostrar_datos(objeto)}')
+                except pymysql.MySQLError as e:
+                    # Capturar fallos de MySQL (ej. tabla no existe, error de sintaxis)
+                    self.registrar_log(f"Error en la ejecución: {e}")
             elif accion == "actualizar":
-                # TODO: cargar el registro por ID y ejecutar el método de actualización del repositorio.
-                self.registrar_log(f"Actualización visual preparada para {entidad.get()} ID {id_var.get()}; lógica pendiente.")
+                datos_finales = {}
+                for atributo, entrada in entradas.items():
+                    if entrada.get() == "":
+                        datos_finales[atributo] = [None, ]
+                    else:
+                        datos_finales[atributo] = entrada.get()
+                datos_finales[IDS[entidad.get()]] = int(id_var.get())
+                clase = CLASES[entidad.get()]
+                objeto = clase(**datos_finales)
+                clase_repositorio = REPOSITORIOS[entidad.get()]
+                objeto_repositorio = clase_repositorio(sesion_actual)
+                utilidades.mostrar_datos(objeto)
+                self.registrar_log(
+                    f"Actualización visual preparada para {entidad.get()} ID {id_var.get()}.")
+                try:
+                    objeto_repositorio.actualizar(objeto)
+                    self.registrar_log(
+                        f"Actualizado con éxito.")
+                except pymysql.err.IntegrityError as e:
+                    self.registrar_log(
+                        f"ERROR: Código de excepción: {e}")
+                except pymysql.MySQLError as e:
+                    self.registrar_log(
+                        f"Error en la ejecución: {e}"
+                    )
             else:
-                # TODO: solicitar confirmación y ejecutar el método eliminar del repositorio.
-                self.registrar_log(f"Eliminación visual preparada para {entidad.get()} ID {id_var.get()}; lógica pendiente.")
+                try:
+                    datos_finales = {}
+                    datos_finales[IDS[entidad.get()]] = int(id_var.get())
+                    print(datos_finales)
+                    clase = CLASES[entidad.get()]
+                    objeto = clase(**datos_finales)
+                    clase_repositorio = REPOSITORIOS[entidad.get()]
+                    objeto_repositorio = clase_repositorio(sesion_actual)
+                    self.registrar_log(f"Eliminación visual preparada para {entidad.get()} ID {id_var.get()}.")
+                    objeto_repositorio.eliminar(objeto)
+                    self.registrar_log(
+                        f"Borrado con éxito.")
+                except pymysql.MySQLError as e:
+                    # Capturar fallos de MySQL (ej. tabla no existe, error de sintaxis)
+                    self.registrar_log(f"Error en la ejecución: {e}")
 
         dibujar_campos()
         ttk.Button(marco, text=texto_boton, command=ejecutar).pack(anchor="e", pady=(12, 0))
@@ -264,8 +344,8 @@ class EcoTechApp:
         ).pack(anchor="w", pady=12)
 
         def generar():
-            # TODO: consultar el repositorio seleccionado y mostrar/exportar el informe.
-            self.registrar_log(f"Informe de {entidad.get()} solicitado; lógica pendiente.")
+            # PENDIENTE: consultar el repositorio seleccionado y mostrar/exportar el informe.
+            self.registrar_log(f"Informe de {entidad.get()} solicitado; lógica pendiente de implementar.")
 
         ttk.Button(marco, text="Generar", command=generar).pack(anchor="e", pady=(8, 0))
 
