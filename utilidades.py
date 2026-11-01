@@ -61,10 +61,10 @@ def validar_rut(rut: str) -> bool:
 
     return True
 
-def validar_patente(patente: str) -> bool:
+def validar_contraseña(contraseña: str) -> bool:
     pass
 
-def validar_contraseña(contraseña: str) -> bool:
+def validar_patente(patente: str) -> bool:
     pass
 
 #Función modificada con IA para validar una fecha y devolverla en formato datetime.
