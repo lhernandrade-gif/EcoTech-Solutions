@@ -15,20 +15,20 @@ def validar_rut(rut: str) -> bool:
     rut = rut.replace(".", "").replace("-", "").strip().upper()
 
     if not rut:
-        print("No se han ingresado datos.")
+        #print("No se han ingresado datos.")
         return False
 
     if not rut.isalnum():
-        print("El RUT contiene caracteres inválidos.")
+        #print("El RUT contiene caracteres inválidos.")
         return False
 
     for digito in rut[:-1]:
         if digito.isalpha():
-            print("El RUT contiene caracteres inválidos.")
+            #print("El RUT contiene caracteres inválidos.")
             return False
 
     if len(rut) != 8 and len(rut) != 9:
-        print("Ingresó un rut de longitud inválida.")
+        #print("Ingresó un rut de longitud inválida.")
         return False
 
     multiplo = 2  # Valor inicial para el cálculo del múltiplo secuencial de los números del RUT
@@ -44,17 +44,17 @@ def validar_rut(rut: str) -> bool:
 
     if final_verificador < 10:
         if final_verificador != int(rut[-1]):
-            print("RUT inválido. El dígito verificador para el RUT ingresado debería ser {}.".format(final_verificador))
+            #print("RUT inválido. El dígito verificador para el RUT ingresado debería ser {}.".format(final_verificador))
             return False
 
     if final_verificador == 10:
         if str(rut[-1]) != "K":
-            print("Rut inválido. El dígito verificador para el RUT ingresado debería ser K.")
+            #print("Rut inválido. El dígito verificador para el RUT ingresado debería ser K.")
             return False
 
     if final_verificador == 11:
         if int(rut[-1]) != 0:
-            print("RUT inválido. El dígito verificador para el RUT ingresado debería ser 0.")
+            #print("RUT inválido. El dígito verificador para el RUT ingresado debería ser 0.")
             return False
 
     return True
