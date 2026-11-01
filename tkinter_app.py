@@ -1,8 +1,3 @@
-"""
-Interfaz visual de EcoTech Solutions.
-La interfaz no ejecuta consultas ni llama a los repositorios todavía.
-Completa los métodos marcados como TODO cuando quieras conectar la lógica.
-"""
 import os
 from dotenv import load_dotenv
 import tkinter as tk
@@ -12,11 +7,8 @@ import pymysql
 from datetime import date
 import utilidades
 import clases
-from clases import Empleado, Departamento, Proyecto, RegistroTiempo, BaseDatos, EmpleadoRepositorio, DepartamentoRepositorio, ProyectoRepositorio, RegistroTiempoRepositorio
+from clases import *
 
-# Campos que se mostrarán en los formularios.
-# Las claves son nombres visibles; los valores son los nombres de atributos
-# de las clases/modelos para facilitar la futura conexión con los repositorios.
 load_dotenv()
 sesion_actual = clases.BaseDatos(os.getenv("DB_HOST"), os.getenv("DB_USER"), os.getenv("DB_PASSWORD"), os.getenv("DB_NAME"))
 
@@ -348,6 +340,9 @@ class EcoTechApp:
             self.registrar_log(f"Informe de {entidad.get()} solicitado; lógica pendiente de implementar.")
 
         ttk.Button(marco, text="Generar", command=generar).pack(anchor="e", pady=(8, 0))
+
+    # Implementaciones para evaluación N° 3
+
 
 
 def main():

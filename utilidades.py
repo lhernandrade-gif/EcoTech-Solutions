@@ -11,6 +11,15 @@ def mostrar_datos(objeto) -> None:
     print("\n".join(lista))
     return "\n".join(lista)
 
+def validar_rut(rut: str) -> bool:
+    pass
+
+def validar_patente(patente: str) -> bool:
+    pass
+
+def validar_contraseña(contraseña: str) -> bool:
+    pass
+
 def generar_informe():
     pass
 
