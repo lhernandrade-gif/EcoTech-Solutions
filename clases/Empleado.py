@@ -1,5 +1,6 @@
 from datetime import date
 from clases import RegistroTiempo
+from utilidades import validar_rut
 
 class Empleado:
     def __init__(
@@ -16,6 +17,8 @@ class Empleado:
             fecha_inicio_contrato: date | None = None,
             salario: int | None = None
     ) -> None:
+        if not validar_rut(rut):
+            raise ValueError("Se ha ingresado un RUT inválido. Por favor verifique los datos e inténtelo nuevamente.")
         self.empleado_id = empleado_id
         self.primer_nombre = primer_nombre
         self.segundo_nombre = segundo_nombre
