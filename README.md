@@ -20,5 +20,8 @@ DB_PASSWORD=tu_contraseña
 DB_NAME=mi_proyecto_db
 ```
 
-### 4. Ejecutar el programa
+### 4. Instalar dependencias
+Desde el terminal, ejecutar en el directorio raíz del proyecto el comando `pip install -r requirements.txt`.
+
+### 5. Ejecutar el programa
 Desde el terminal, ejecutar en el directorio raíz del proyecto el comando `py tkinter_app.py`.
