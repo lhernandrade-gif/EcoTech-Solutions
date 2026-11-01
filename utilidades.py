@@ -1,3 +1,5 @@
+from datetime import datetime
+
 def mostrar_datos(objeto) -> None:
     lista = []
     if isinstance(objeto, list):
@@ -64,6 +66,18 @@ def validar_patente(patente: str) -> bool:
 
 def validar_contraseña(contraseña: str) -> bool:
     pass
+
+#Función modificada con IA para validar una fecha y devolverla en formato datetime.
+def validar_y_convertir_fecha(fecha: str):
+    formatos = ("%Y-%m-%d", "%d-%m-%Y")
+
+    for formato in formatos:
+        try:
+            return datetime.strptime(fecha, formato).date()
+        except ValueError:
+            continue
+
+    return False
 
 def generar_informe():
     pass
