@@ -1,6 +1,8 @@
 from datetime import datetime
 
 def mostrar_datos(objeto) -> None:
+    if objeto == None:
+        return "No existen resultados para esta búsqueda."
     lista = []
     if isinstance(objeto, list):
         for dict in objeto:
