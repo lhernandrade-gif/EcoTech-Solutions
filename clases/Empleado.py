@@ -17,15 +17,16 @@ class Empleado:
             fecha_inicio_contrato: date | None = None,
             salario: int | None = None
     ) -> None:
-        if rut != None:
-            if not validar_rut(rut):
-                raise ValueError("Se ha ingresado un RUT inválido. Por favor verifique los datos e inténtelo nuevamente.")
         self.empleado_id = empleado_id
         self.primer_nombre = primer_nombre
         self.segundo_nombre = segundo_nombre
         self.primer_apellido = primer_apellido
         self.segundo_apellido = segundo_apellido
-        self.rut = rut
+        if rut != None:
+            if not validar_rut(rut):
+                # Se debe añadir el try/except que maneja la excepción en la capa de interfaz de usuario.
+                raise ValueError("Se ha ingresado un RUT inválido. Por favor verifique los datos e inténtelo nuevamente.")
+        self.rut = validar_rut(rut)
         self.direccion = direccion
         self.telefono = telefono
         self.email = email

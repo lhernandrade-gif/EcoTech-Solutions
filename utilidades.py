@@ -62,7 +62,7 @@ def validar_rut(rut: str) -> bool:
             #print("RUT inválido. El dígito verificador para el RUT ingresado debería ser 0.")
             return False
 
-    return True
+    return rut[0:-1] + "-" + rut[-1:]
 
 def validar_nombre_usuario (nombre_usuario: str) -> bool:
     #No más de 12 caracteres alfanuméricos
@@ -76,9 +76,8 @@ def validar_patente(patente: str) -> bool:
     pass
 
 #Función modificada con IA para validar una fecha y devolverla en formato datetime.
-def validar_y_convertir_fecha(fecha: str):
+def validar_y_convertir_fecha(fecha: str) -> date | bool:
     formatos = ("%Y-%m-%d", "%d-%m-%Y")
-
     for formato in formatos:
         try:
             return datetime.strptime(fecha, formato).date()
@@ -86,8 +85,14 @@ def validar_y_convertir_fecha(fecha: str):
         #Ignorar la excepción para poder evaluar ambos formatos dentro del ciclo for en caso que el primero falle.
         #Si se detecta una excepción ValueError, se manejará externamente con un raise, para el caso que la función retorne False.
             continue
-
     return False
+
+def validar_y_convertir_ingreso_ids(ids: str) -> list | bool:
+    lista_ids = ids.split(",")
+    for id in lista_ids:
+        if not id.isdigit():
+            return False
+    return lista_ids
 
 def generar_informe():
     pass

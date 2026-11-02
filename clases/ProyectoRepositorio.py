@@ -8,17 +8,18 @@ class ProyectoRepositorio:
     def guardar(self, proyecto: Proyecto) -> None:
         with self.config.conectar() as conexion:
             cursor = conexion.cursor()
+            cursor.execute('''
+                            INSERT INTO proyectos (nombre, descripcion, fecha_proyecto)
+                            VALUES (%s, %s, %s)
+                            ''', (proyecto.nombre, proyecto.descripcion, proyecto.fecha_proyecto))
+            proyecto_id = cursor.lastrowid
             for empleado in proyecto.lista_empleados:
                 cursor.execute('''
-                               INSERT INTO proyectos (nombre, descripcion, fecha_proyecto, empleado)
-                               VALUES (%s, %s, %s, %s)
-                               ''', (proyecto.nombre, proyecto.descripcion, proyecto.fecha_proyecto, empleado))
-                conexion.commit()
-
-            #Las líneas siguientes retornan el objeto empleado con su id asignado por MySQL
-            #El programa actualmente no requiere esta funcionalidad
-            #empleado.empleado_id = cursor.lastrowid
-            #return empleado
+                                INSERT INTO proyecto_empleados (proyecto_id, empleado_id)
+                                VALUES (%s, %s)
+                                ''',
+                               (proyecto_id, empleado))
+            conexion.commit()
 
     def buscar_por_id(self, proyecto: Proyecto) -> Proyecto:
         with self.config.conectar() as conexion:
