@@ -64,7 +64,12 @@ def validar_rut(rut: str) -> bool:
 
     return True
 
+def validar_nombre_usuario (nombre_usuario: str) -> bool:
+    #No más de 12 caracteres alfanuméricos
+    pass
+
 def validar_contraseña(contraseña: str) -> bool:
+    #Entre 8 y 14 caracteres. Debe contener al menos una mayúscula, una minúscula y un símbolo: *, #, $, @, _
     pass
 
 def validar_patente(patente: str) -> bool:
@@ -78,6 +83,8 @@ def validar_y_convertir_fecha(fecha: str):
         try:
             return datetime.strptime(fecha, formato).date()
         except ValueError:
+        #Ignorar la excepción para poder evaluar ambos formatos dentro del ciclo for en caso que el primero falle.
+        #Si se detecta una excepción ValueError, se manejará externamente con un raise, para el caso que la función retorne False.
             continue
 
     return False
