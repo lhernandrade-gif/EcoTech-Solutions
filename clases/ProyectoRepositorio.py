@@ -33,6 +33,8 @@ class ProyectoRepositorio:
             resultados_consulta = []
             for fila in filas:
                 resultados_consulta.append({"proyecto_id": fila[0], "nombre": fila[1], "descripcion": fila[2], "fecha_proyecto": fila[3], "empleado": fila[4]})
+            if not resultados_consulta:
+                return None
             return resultados_consulta
 
     def actualizar(self, proyecto: Proyecto) -> None:

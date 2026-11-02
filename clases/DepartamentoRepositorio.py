@@ -31,10 +31,11 @@ class DepartamentoRepositorio:
                               ON d.departamento_id = de.departamento_id
                               WHERE d.departamento_id = %s''', (departamento.departamento_id,))
             filas: tuple[tuple[Any,...]] | None = cursor.fetchall()
-            if filas is None: return None
             resultados_consulta = []
             for fila in filas:
                 resultados_consulta.append({"departamento_id": fila[0], "nombre": fila[1], "gerente": fila[2], "empleado_id": fila[3]})
+            if not resultados_consulta:
+                return None
             return resultados_consulta
 
     def actualizar(self, departamento: Departamento) -> None:

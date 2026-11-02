@@ -1,7 +1,7 @@
 from datetime import datetime
 
 def mostrar_datos(objeto) -> None:
-    if objeto == None:
+    if not objeto:
         return "No existen resultados para esta búsqueda."
     lista = []
     if isinstance(objeto, list):
@@ -9,6 +9,7 @@ def mostrar_datos(objeto) -> None:
             for clave, valor in dict.items():
                 print(f"{clave}: {valor}", end=" ")
                 lista.append(f"{clave}: {valor}")
+            lista.append("\n")
     else:
         for clave, valor in vars(objeto).items():
             lista.append(f"{clave}: {valor}\n")
