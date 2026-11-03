@@ -1,6 +1,6 @@
 from datetime import datetime
 
-def mostrar_datos(objeto) -> None:
+def mostrar_datos(objeto) -> str | None:
     if not objeto:
         return "No existen resultados para esta búsqueda."
     lista = []
@@ -16,7 +16,7 @@ def mostrar_datos(objeto) -> None:
     #print("\n".join(lista))
     return "\n".join(lista)
 
-def validar_rut(rut: str) -> bool:
+def validar_rut(rut: str) -> str | bool:
     rut = rut.replace(".", "").replace("-", "").strip().upper()
 
     if not rut:
@@ -68,7 +68,7 @@ def validar_nombre_usuario (nombre_usuario: str) -> bool:
     #No más de 12 caracteres alfanuméricos
     pass
 
-def validar_contraseña(contraseña: str) -> bool:
+def validar_contrasena(contrasena: str) -> bool:
     #Entre 8 y 14 caracteres. Debe contener al menos una mayúscula, una minúscula y un símbolo: *, #, $, @, _
     pass
 
