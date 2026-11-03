@@ -1,7 +1,7 @@
 from datetime import date, datetime
 #Decimal se utiliza en aplicaciones financieras por su mayor precisión en comparación con float.
 from decimal import Decimal, InvalidOperation
-import string #Utilizar para el método string.punctuation en validar_contrasena
+import string
 
 def mostrar_datos(objeto) -> str | None:
     if not objeto:
@@ -68,14 +68,15 @@ def validar_rut(rut: str) -> str | bool:
     return rut[0:-1] + "-" + rut[-1:]
 
 def validar_nombre_usuario (nombre_usuario: str) -> bool:
-    #No más de 12 caracteres alfanuméricos
-    pass
+    return nombre_usuario.isalnum() and len(nombre_usuario) <= 12
 
-def validar_contrasena(contrasena: str) -> bool:
-    #Entre 8 y 14 caracteres. Debe contener al menos una mayúscula, una minúscula y un símbolo: *, #, $, @, _
-    #Recomendación de IA: Usar string.punctuation, que contiene los siguientes caracteres: !"#$%&\'()*+,-./:;<=>?@[\\]^_`{|}~
-    #Esta verificación de caracteres puede hacerse en una sola línea -> has_symbol = any(char in string.punctuation for char in password)
-    pass
+#Validación generada con IA en base a restricciones predefinidas (8 a 14 caracteres, 1 mayúscula, 1 minúscula, 1 símbolo).
+#string.punctuation es una constante que almacena los siguientes caracteres ASCII: !"#$%&\'()*+,-./:;<=>?@[\\]^_`{|}~
+def validar_password_usuario (password: str) -> bool:
+    tiene_mayuscula = any(char.isupper() for char in password)
+    tiene_minuscula = any(char.islower() for char in password)
+    tiene_simbolo = any(char in string.punctuation for char in password)
+    return 8 <= len(password) <= 14 and tiene_mayuscula and tiene_minuscula and tiene_simbolo
 
 #Adaptado de código en módulos de la unidad 3
 def validar_patente(patente: str) -> bool:

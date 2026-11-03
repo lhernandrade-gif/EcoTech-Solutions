@@ -11,6 +11,7 @@ class Departamento:
         self.departamento_id = departamento_id
         self.nombre = nombre
         self.gerente = gerente
+        #Validación de entrada de datos pendiente en lista_empleados
         self.lista_empleados = lista_empleados
 
     def asignar_empleado(self, empleado: Empleado) -> None:

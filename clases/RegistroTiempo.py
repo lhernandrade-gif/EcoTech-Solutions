@@ -8,6 +8,7 @@ class RegistroTiempo:
                  empleado_id = None,
                  proyecto_id = None):
         self.registro_tiempo_id = registro_tiempo_id
+        #Validación de entrada de fecha pendiente.
         self.fecha = fecha
         self.horas_trabajadas = horas_trabajadas
         self.descripcion_tareas = descripcion_tareas
