@@ -7,13 +7,13 @@ def mostrar_datos(objeto) -> None:
     if isinstance(objeto, list):
         for dict in objeto:
             for clave, valor in dict.items():
-                print(f"{clave}: {valor}", end=" ")
+                #print(f"{clave}: {valor}", end=" ")
                 lista.append(f"{clave}: {valor}")
             lista.append("\n")
     else:
         for clave, valor in vars(objeto).items():
             lista.append(f"{clave}: {valor}\n")
-    print("\n".join(lista))
+    #print("\n".join(lista))
     return "\n".join(lista)
 
 def validar_rut(rut: str) -> bool:
@@ -28,7 +28,7 @@ def validar_rut(rut: str) -> bool:
         return False
 
     for digito in rut[:-1]:
-        if digito.isalpha():
+        if not digito.isdigit():
             #print("El RUT contiene caracteres inválidos.")
             return False
 
