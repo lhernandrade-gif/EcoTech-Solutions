@@ -469,6 +469,33 @@ VALUES
 SELECT * FROM registro_tiempo;
 
 -- ============================================================
+-- Tabla: vehiculos
+-- ============================================================
+
+CREATE TABLE vehiculos (
+    vehiculo_id INT AUTO_INCREMENT PRIMARY KEY,
+    modelo VARCHAR(50),
+    patente CHAR(6),
+    tipo VARCHAR(9),
+    fecha_adquisicion DATE,
+
+    CONSTRAINT chk_tipo_vehiculo
+        CHECK (tipo IN ('AUTO', 'SUV', 'CAMIONETA', 'FURGON', 'VAN'))
+);
+
+-- ============================================================
+-- Datos de prueba: vehiculos (5 registros)
+-- ============================================================
+
+INSERT INTO vehiculos (modelo, patente, tipo, fecha_adquisicion)
+VALUES
+    ('Toyota Corolla', 'ABCD12', 'AUTO', '2022-05-14'),
+    ('Hyundai Tucson', 'EFGH34', 'SUV', '2023-08-21'),
+    ('Ford Ranger', 'AB1234', 'CAMIONETA', '2021-11-03'),
+    ('Peugeot Partner', 'JKLM56', 'FURGON', '2024-02-19'),
+    ('Mercedes-Benz Vito', 'CD5678', 'VAN', '2023-06-10');
+
+-- ============================================================
 -- Consulta: registros con nombres de empleados y proyectos
 -- ============================================================
 

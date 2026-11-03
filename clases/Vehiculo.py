@@ -11,14 +11,14 @@ class Vehiculo:
         modelo: str | None = None,
         patente: str | None = None,
         tipo: str | None = None,
-        fecha_adquisicion: str | None = None,
+        fecha_adquisicion: str | date | None = None,
     )-> None:
         self.vehiculo_id = vehiculo_id
         self.modelo = modelo
         if patente != None:
-            if not validar_patente(patente):
+            if not validar_patente(patente.strip()):
                 raise ValueError("Formato de patente inválido.")
-        self.patente = patente
+        self.patente = patente.strip()
         if tipo != None:
             if tipo.upper() not in tipo_vehiculo:
                 raise ValueError("Tipo de vehiculo inválido. Introducir solo caracteres alfabéticos sin tildes. Entradas válidas: Auto, SUV, camioneta, furgon, van.")

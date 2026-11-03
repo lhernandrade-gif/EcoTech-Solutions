@@ -8,7 +8,7 @@ class Proyecto:
         proyecto_id: int | None = None,
         nombre: str | None = None,
         descripcion: str | None = None,
-        fecha_proyecto: date | None = None,
+        fecha_proyecto: str | date | None = None,
         lista_empleados: list[int] | None = None
     )-> None:
         self.proyecto_id = proyecto_id
@@ -21,7 +21,7 @@ class Proyecto:
         self.fecha_proyecto = validar_y_convertir_fecha(fecha_proyecto)
         if lista_empleados != None:
             if not validar_y_convertir_ingreso_ids(lista_empleados):
-                raise ValueError("Se han ingresado IDs inválidos. Por favor ingrese los IDs como números separados por comas.")
+                raise ValueError("Se han ingresado IDs inválidos. Por favor ingrese los IDs como números separados por comas sin espacios.")
         self.lista_empleados = validar_y_convertir_ingreso_ids(lista_empleados)
 
 
