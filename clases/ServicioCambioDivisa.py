@@ -4,8 +4,7 @@ import logging
 from utilidades import validar_monto
 
 #Nota: No será necesario validar códigos de moneda ya que se usará un combobox con constantes predefinidas.
-
-def cambio_divisa(monto: str):
+def cambio_divisa(monto: str, moneda_base: str, moneda_intercambio: str) -> str:
     try:
         token = os.getenv('TOKEN_DIVISAS')
         if not token:
@@ -13,8 +12,6 @@ def cambio_divisa(monto: str):
         if not validar_monto(monto):
             raise ValueError("Se ha ingresado un monto inválido.")
         url = 'https://api.api-ninjas.com/v1/convertcurrency'
-        moneda_base = 'CLP'
-        moneda_intercambio = 'USD'
         respuesta = requests.get(url,
                       headers={'X-Api-Key': token},
                       params={'have': moneda_base, 'want': moneda_intercambio, 'amount': monto},
@@ -53,7 +50,7 @@ def cambio_divisa(monto: str):
         elif codigo_estado >= 500:
             mensaje = "El servidor que proporciona el servicio está experimentando problemas. Inténtalo más tarde."
         else:
-            mensaje = f"No se pudo realizar la conversión (Error {codigo_estado}). Revisa los datos ingresados."
+            mensaje = f"No se pudo realizar la conversión (Error {codigo_estado})."
         logging.exception(f"Error HTTP {codigo_estado} detectado. Respuesta del servidor: {e.response.text}")
         raise Exception(mensaje) from e
 

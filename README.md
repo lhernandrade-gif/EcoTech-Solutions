@@ -20,8 +20,18 @@ DB_PASSWORD=tu_contraseña
 DB_NAME=mi_proyecto_db
 ```
 
-### 4. Instalar dependencias
+### 4. Configuración de Claves API (API Keys)
+Visita https://api-ninjas.com/api/convertcurrency y obtén una API Key para Currency Conversion API. Añádela en `.env` como:
+```env
+TOKEN_DIVISAS=tu_clave_api
+```
+Visita también https://www.weatherapi.com y obtén una API Key para Weather API. Ingrésala en `.env`:
+```env
+TOKEN_CLIMA=tu_clave_api
+```
+
+### 5. Instalar dependencias
 Desde el terminal, ejecutar en el directorio raíz del proyecto el comando `pip install -r requirements.txt`.
 
-### 5. Ejecutar el programa
-Desde el terminal, ejecutar en el directorio raíz del proyecto el comando `py tkinter_app.py`.
+### 6. Ejecutar el programa
+Desde el terminal, ejecutar en el directorio raíz del proyecto el comando `main.py`.
