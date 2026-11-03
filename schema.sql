@@ -480,7 +480,10 @@ CREATE TABLE vehiculos (
     fecha_adquisicion DATE,
 
     CONSTRAINT chk_tipo_vehiculo
-        CHECK (tipo IN ('AUTO', 'SUV', 'CAMIONETA', 'FURGON', 'VAN'))
+        CHECK (tipo IN ('AUTO', 'SUV', 'CAMIONETA', 'FURGON', 'VAN')),
+
+    CONSTRAINT uq_patente_vehiculo
+        UNIQUE (patente)
 );
 
 -- ============================================================
