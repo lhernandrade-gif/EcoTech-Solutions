@@ -28,7 +28,7 @@ def obtener_datos_climaticos(fecha: str, ciudad: str):
                       timeout=8)
         respuesta.raise_for_status()
         datos = respuesta.json()
-        if not datos or datos["location"]["name"] != ciudad:
+        if not datos or datos["location"]["name"] != ciudad.strip():
             print("La búsqueda no ha arrojado resultados. Verifique que la ciudad ingresada sea correcta.")
             return None
         localidad = datos["location"]["name"]
@@ -61,7 +61,7 @@ def obtener_datos_climaticos(fecha: str, ciudad: str):
         logging.exception(mensaje)
         raise Exception(mensaje) from e
 
-    #Bloque except generado con IA. Revisar y validar.
+    #Bloque except generado con IA.
     except requests.exceptions.HTTPError as e:
         codigo_estado = e.response.status_code
         if codigo_estado in (401, 403):
