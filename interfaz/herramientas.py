@@ -138,6 +138,7 @@ def abrir_herramientas(app):
                 raise ValueError("El empleado no tiene un salario registrado.")
             datos_empleado["salario"] = empleado.salario
             monto_var.set(str(empleado.salario))
+            moneda_base_var.set("CLP")
             nombre = " ".join(
                 parte for parte in (
                     empleado.primer_nombre,
