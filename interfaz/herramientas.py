@@ -263,7 +263,7 @@ def abrir_herramientas(app):
             clima, textvariable=valores_clima[clave], style="Subtitulo.TLabel"
         ).grid(
             row=fila, column=columna + 1, sticky="w", pady=(6, 0),
-            padx=(0, 10) if columna == 0 else (10, 0)
+            padx=(0, 10) if columna == 0 else (28, 0)
         )
 
     def mostrar_datos_climaticos(datos):
