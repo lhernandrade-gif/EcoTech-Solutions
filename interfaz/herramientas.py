@@ -161,7 +161,8 @@ def abrir_herramientas(app):
 
     resultado_var = tk.StringVar()
     ttk.Label(
-        conversion, textvariable=resultado_var, style="Seccion.TLabel"
+        conversion, textvariable=resultado_var, style="Seccion.TLabel",
+        wraplength=320, justify="right", anchor="e"
     ).grid(row=4, column=1, sticky="e", pady=(4, 0))
 
     def convertir():
@@ -262,7 +263,7 @@ def abrir_herramientas(app):
             clima, textvariable=valores_clima[clave], style="Subtitulo.TLabel"
         ).grid(
             row=fila, column=columna + 1, sticky="w", pady=(6, 0),
-            padx=(0, 10 if columna == 0 else 0)
+            padx=(0, 10) if columna == 0 else (10, 0)
         )
 
     def mostrar_datos_climaticos(datos):

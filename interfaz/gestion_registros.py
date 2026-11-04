@@ -27,7 +27,8 @@ def _referencia_por_id(entidad, registro_id):
 
 
 def _abrir_formulario_id(app, titulo, texto_boton, accion):
-    ventana = app._nueva_ventana(titulo, "700x650")
+    geometria = "700x760" if accion == "actualizar" else "700x650"
+    ventana = app._nueva_ventana(titulo, geometria)
     marco = ttk.Frame(ventana, padding=24)
     marco.pack(fill="both", expand=True)
 
