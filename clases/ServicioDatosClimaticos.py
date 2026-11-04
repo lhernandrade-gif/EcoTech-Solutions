@@ -33,10 +33,10 @@ def obtener_datos_climaticos(fecha: str, ciudad: str):
             return None
         localidad = datos["location"]["name"]
         pais = datos["location"]["country"]
-        clima = datos["current"]["condition"]["text"]
-        temperatura = datos["current"]["temp_c"]
-        humedad_relativa = datos["current"]["humidity"]
-        velocidad_viento = datos["current"]["wind_kph"]
+        clima = datos["forecast"]["forecastday"][0]["day"]["condition"]["text"]
+        temperatura = datos["forecast"]["forecastday"][0]["day"]["avgtemp_c"]
+        humedad_relativa = datos["forecast"]["forecastday"][0]["day"]["avghumidity"]
+        velocidad_viento = datos["forecast"]["forecastday"][0]["day"]["maxwind_kph"]
         #print(f"{localidad}, {pais}, {clima}, {temperatura} °C, {humedad_relativa}%, {velocidad_viento} km/h")
         return clima, temperatura, humedad_relativa, velocidad_viento
 
