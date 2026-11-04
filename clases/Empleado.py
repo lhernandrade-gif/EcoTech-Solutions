@@ -1,7 +1,7 @@
 import logging
 from datetime import date
 from clases import RegistroTiempo
-from utilidades import validar_rut
+from utilidades import validar_y_normalizar_rut
 from utilidades import validar_y_convertir_fecha
 
 class Empleado:
@@ -26,10 +26,10 @@ class Empleado:
             self.primer_apellido = primer_apellido
             self.segundo_apellido = segundo_apellido
             if rut != None:
-                if not validar_rut(rut):
+                if not validar_y_normalizar_rut(rut):
                     # Se debe añadir el try/except que maneja la excepción en la capa de interfaz de usuario.
                     raise ValueError("Se ha ingresado un RUT inválido. Por favor verifique los datos e inténtelo nuevamente.")
-            self.rut = validar_rut(rut)
+            self.rut = validar_y_normalizar_rut(rut)
             self.direccion = direccion
             self.telefono = telefono
             self.email = email

@@ -19,7 +19,7 @@ def mostrar_datos(objeto) -> str | None:
     #print("\n".join(lista))
     return "\n".join(lista)
 
-def validar_rut(rut: str) -> str | bool:
+def validar_y_normalizar_rut(rut: str) -> str | bool:
     rut = rut.replace(".", "").replace("-", "").strip().upper()
 
     if not rut:
