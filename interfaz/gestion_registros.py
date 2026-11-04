@@ -1,5 +1,6 @@
 import tkinter as tk
 from tkinter import ttk, messagebox
+from types import SimpleNamespace
 
 import utilidades
 
@@ -17,6 +18,12 @@ def abrir_actualizar(app):
 
 def abrir_eliminar(app):
     _abrir_formulario_id(app, "Eliminar registro", "Eliminar", "eliminar")
+
+
+def _referencia_por_id(entidad, registro_id):
+    if entidad == "Vehículos":
+        return SimpleNamespace(vehiculo_id=registro_id)
+    return crear_entidad(entidad, {}, registro_id)
 
 
 def _abrir_formulario_id(app, titulo, texto_boton, accion):
@@ -97,7 +104,7 @@ def _abrir_formulario_id(app, titulo, texto_boton, accion):
             registro_id = obtener_id()
             repositorio = REPOSITORIOS[entidad.get()](sesion_actual)
             if accion == "buscar":
-                objeto = crear_entidad(entidad.get(), {}, registro_id)
+                objeto = _referencia_por_id(entidad.get(), registro_id)
                 encontrado = repositorio.buscar_por_id(objeto)
                 texto = utilidades.mostrar_datos(encontrado)
                 mostrar_resultado(texto or "No existen resultados para esta búsqueda.")
@@ -115,7 +122,7 @@ def _abrir_formulario_id(app, titulo, texto_boton, accion):
                     parent=ventana
                 ):
                     return
-                objeto = crear_entidad(entidad.get(), {}, registro_id)
+                objeto = _referencia_por_id(entidad.get(), registro_id)
                 repositorio.eliminar(objeto)
                 app.registrar_log(f"Registro {entidad.get()} ID {registro_id} eliminado.")
                 mostrar_resultado("Registro eliminado correctamente.")
