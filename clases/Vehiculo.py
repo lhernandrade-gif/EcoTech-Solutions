@@ -17,10 +17,12 @@ class Vehiculo:
         try:
             self.vehiculo_id = vehiculo_id
             self.modelo = modelo
-            if patente != None:
-                if not validar_patente(patente.strip()):
-                    raise ValueError("Formato de patente inválido.")
-            self.patente = patente.strip() if patente is not None else None
+            if not isinstance(patente, str) or not patente.strip():
+                raise ValueError("Debe ingresar una patente.")
+            patente = patente.strip().upper()
+            if not validar_patente(patente):
+                raise ValueError("Formato de patente inválido.")
+            self.patente = patente
             if tipo != None:
                 if tipo.upper() not in tipo_vehiculo:
                     raise ValueError("Tipo de vehiculo inválido. Introducir solo caracteres alfabéticos sin tildes. Entradas válidas: Auto, SUV, camioneta, furgon, van.")
