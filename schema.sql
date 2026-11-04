@@ -475,7 +475,7 @@ SELECT * FROM registro_tiempo;
 CREATE TABLE vehiculos (
     vehiculo_id INT AUTO_INCREMENT PRIMARY KEY,
     modelo VARCHAR(50),
-    patente CHAR(6),
+    patente CHAR(6) NOT NULL,
     tipo VARCHAR(9),
     fecha_adquisicion DATE,
 
