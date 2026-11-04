@@ -91,7 +91,7 @@ def abrir_herramientas(app):
         row=1, column=0, columnspan=5, sticky="w", pady=(8, 0)
     )
 
-    datos_empleado = {"salario": None}
+    datos_empleado = {"salario_CLP": None}
     origen_actual = {"valor": "manual"}
     estado_var = tk.StringVar()
     ttk.Label(
@@ -99,7 +99,7 @@ def abrir_herramientas(app):
     ).grid(row=5, column=0, columnspan=2, sticky="w", pady=(4, 0))
 
     def limpiar_empleado(*_args):
-        datos_empleado["salario"] = None
+        datos_empleado["salario_CLP"] = None
         monto_var.set("")
         resultado_empleado_var.set("")
 
@@ -134,10 +134,10 @@ def abrir_herramientas(app):
                 empleado = repositorio.buscar_por_rut(Empleado(rut=valor))
             if empleado is None:
                 raise ValueError("No se encontró un empleado con esos datos.")
-            if empleado.salario is None:
+            if empleado.salario_CLP is None:
                 raise ValueError("El empleado no tiene un salario registrado.")
-            datos_empleado["salario"] = empleado.salario
-            monto_var.set(str(empleado.salario))
+            datos_empleado["salario_CLP"] = empleado.salario_CLP
+            monto_var.set(str(empleado.salario_CLP))
             moneda_base_var.set("CLP")
             nombre = " ".join(
                 parte for parte in (
@@ -147,7 +147,7 @@ def abrir_herramientas(app):
                 ) if parte
             )
             resultado_empleado_var.set(
-                f"{nombre} · Salario cargado: {empleado.salario} CLP"
+                f"{nombre} · Salario cargado: {empleado.salario_CLP} CLP"
             )
             estado_var.set("")
         except Exception as error:
@@ -165,7 +165,7 @@ def abrir_herramientas(app):
     ).grid(row=4, column=1, sticky="e", pady=(4, 0))
 
     def convertir():
-        if origen_var.get() == "empleado" and datos_empleado["salario"] is None:
+        if origen_var.get() == "empleado" and datos_empleado["salario_CLP"] is None:
             estado_var.set("Busca primero un empleado con salario registrado.")
             return
         monto = monto_var.get().strip()

@@ -17,7 +17,7 @@ class Empleado:
             direccion: str | None = None,
             telefono: str | None = None,
             fecha_inicio_contrato: date | None = None,
-            salario: int | None = None
+            salario_CLP: int | None = None
     ) -> None:
         try:
             self.empleado_id = empleado_id
@@ -38,7 +38,7 @@ class Empleado:
                     # Se debe añadir el try/except que maneja la excepción en la capa de interfaz de usuario.
                     raise ValueError("Se ha ingresado una fecha en formato inválido. Por favor ingrese una fecha en formato DD-MM-YYYY o YYYY-MM-DD.")
             self.fecha_inicio_contrato = validar_y_convertir_fecha(fecha_inicio_contrato)
-            self.salario = salario
+            self.salario_CLP = salario_CLP
         except ValueError as e:
             logging.exception(e)
             raise

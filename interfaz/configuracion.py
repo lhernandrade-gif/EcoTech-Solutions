@@ -27,7 +27,7 @@ ENTIDADES = {
         ("Teléfono", "telefono"),
         ("Email", "email"),
         ("Fecha de inicio de contrato (AAAA-MM-DD)", "fecha_inicio_contrato"),
-        ("Salario", "salario"),
+        ("Salario (CLP)", "salario_CLP"),
     ],
     "Departamentos": [
         ("Nombre", "nombre"),
@@ -37,7 +37,7 @@ ENTIDADES = {
     "Proyectos": [
         ("Nombre", "nombre"),
         ("Descripción", "descripcion"),
-        ("Fecha del proyecto (AAAA-MM-DD)", "fecha_proyecto"),
+        ("Fecha del proyecto (AAAA-MM-DD)", "fecha_inicio_proyecto"),
         ("IDs de empleados (separados por coma)", "lista_empleados"),
     ],
     "Registros de tiempo": [
@@ -92,7 +92,7 @@ CAMPOS_REQUERIDOS = {
 }
 
 IDS_LISTA = {"lista_empleados"}
-IDS_NUMERICOS = {"gerente", "salario", "empleado_id", "proyecto_id"}
+IDS_NUMERICOS = {"gerente", "salario_CLP", "empleado_id", "proyecto_id"}
 
 
 def crear_entidad(entidad, valores, registro_id=None):
@@ -119,7 +119,7 @@ def crear_entidad(entidad, valores, registro_id=None):
                 raise ValueError(f"El campo '{atributo}' debe ser un número entero.") from error
             if atributo in {"gerente", "empleado_id", "proyecto_id"} and datos[atributo] <= 0:
                 raise ValueError(f"El campo '{atributo}' debe ser mayor que cero.")
-            if atributo == "salario" and datos[atributo] < 0:
+            if atributo == "salario_CLP" and datos[atributo] < 0:
                 raise ValueError("El salario no puede ser negativo.")
         elif atributo == "horas_trabajadas":
             try:
@@ -130,7 +130,7 @@ def crear_entidad(entidad, valores, registro_id=None):
                 raise ValueError("Las horas deben ser mayores que cero y no superar 24.")
         elif atributo == "tipo" and entidad == "Vehículos":
             datos[atributo] = valor.upper()
-        elif atributo in {"fecha", "fecha_inicio_contrato", "fecha_proyecto", "fecha_adquisicion"}:
+        elif atributo in {"fecha", "fecha_inicio_contrato", "fecha_inicio_proyecto", "fecha_adquisicion"}:
             fecha = utilidades.validar_y_convertir_fecha(valor)
             if fecha is False:
                 raise ValueError(f"La fecha de '{atributo}' debe tener formato AAAA-MM-DD o DD-MM-AAAA.")

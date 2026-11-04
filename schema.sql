@@ -34,7 +34,7 @@ CREATE TABLE empleados (
 
     fecha_inicio_contrato DATE,
 
-    salario INT,
+    salario_CLP INT,
 
     CONSTRAINT uq_empleados_rut
         UNIQUE (rut),
@@ -42,8 +42,8 @@ CREATE TABLE empleados (
     CONSTRAINT uq_empleados_email
         UNIQUE (email),
 
-    CONSTRAINT chk_empleados_salario
-        CHECK (salario IS NULL OR salario >= 0)
+    CONSTRAINT chk_empleados_salario_CLP
+        CHECK (salario_CLP IS NULL OR salario_CLP >= 0)
 );
 
 -- ============================================================
@@ -60,7 +60,7 @@ INSERT INTO empleados (
     telefono,
     email,
     fecha_inicio_contrato,
-    salario
+    salario_CLP
 )
 VALUES
 (
@@ -139,7 +139,7 @@ CREATE TABLE proyectos (
 
     nombre VARCHAR(150),
     descripcion TEXT,
-    fecha_proyecto DATE
+    fecha_inicio_proyecto DATE
 );
 
 -- ===================================================================
@@ -172,7 +172,7 @@ CREATE TABLE proyecto_empleados (
 INSERT INTO proyectos (
     nombre,
     descripcion,
-    fecha_proyecto
+    fecha_inicio_proyecto
 )
 VALUES
 (
@@ -232,7 +232,7 @@ SELECT * FROM proyecto_empleados;
 SELECT
     p.proyecto_id,
     p.nombre AS proyecto,
-    p.fecha_proyecto,
+    p.fecha_inicio_proyecto,
     e.empleado_id AS empleado_id,
     CONCAT(
         e.primer_nombre, ' ',
