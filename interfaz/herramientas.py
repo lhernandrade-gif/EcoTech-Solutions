@@ -20,10 +20,17 @@ def abrir_herramientas(app):
         contenedor, text="Conversión de Divisas", style="Seccion.TLabel"
     ).pack(anchor="w", pady=(0, 12))
 
+    conversion = ttk.Frame(contenedor)
+    conversion.pack(fill="x")
+    conversion.columnconfigure(0, weight=3)
+    conversion.columnconfigure(1, weight=2)
+
     origen_var = tk.StringVar(value="manual")
-    ttk.Label(contenedor, text="Origen del monto").pack(anchor="w")
-    opciones_origen = ttk.Frame(contenedor)
-    opciones_origen.pack(anchor="w", pady=(4, 10))
+    ttk.Label(conversion, text="Origen del monto").grid(
+        row=0, column=0, columnspan=2, sticky="w"
+    )
+    opciones_origen = ttk.Frame(conversion)
+    opciones_origen.grid(row=1, column=0, columnspan=2, sticky="w", pady=(4, 12))
     ttk.Radiobutton(
         opciones_origen, text="Monto manual", variable=origen_var,
         value="manual", command=lambda: cambiar_origen()
@@ -34,37 +41,62 @@ def abrir_herramientas(app):
     ).pack(side="left")
 
     monto_var = tk.StringVar()
-    monto_marco = ttk.Frame(contenedor)
-    ttk.Label(monto_marco, text="Monto").pack(side="left", padx=(0, 12))
-    ttk.Entry(monto_marco, textvariable=monto_var, width=24).pack(side="left")
+    monto_marco = ttk.Frame(conversion)
+    monto_marco.grid(row=2, column=0, sticky="ew", padx=(0, 18), pady=(0, 12))
+    ttk.Label(monto_marco, text="Monto").pack(anchor="w", pady=(0, 4))
+    monto_entrada = ttk.Entry(monto_marco, textvariable=monto_var, width=24)
+    monto_entrada.pack(anchor="w", fill="x")
 
-    empleado_marco = ttk.Frame(contenedor)
+    monedas = ("CLP", "USD", "EUR")
+    fila_monedas = ttk.Frame(conversion)
+    fila_monedas.grid(row=2, column=1, sticky="ew", pady=(0, 12))
+    fila_monedas.columnconfigure(0, weight=1)
+    fila_monedas.columnconfigure(1, weight=1)
+    moneda_base_var = tk.StringVar(value="CLP")
+    moneda_destino_var = tk.StringVar(value="USD")
+    ttk.Label(fila_monedas, text="Moneda base").grid(row=0, column=0, sticky="w")
+    ttk.Label(fila_monedas, text="Convertir a").grid(
+        row=0, column=1, sticky="w", padx=(12, 0)
+    )
+    ttk.Combobox(
+        fila_monedas, textvariable=moneda_base_var, values=monedas,
+        state="readonly", width=10
+    ).grid(row=1, column=0, sticky="ew", pady=(4, 0))
+    ttk.Combobox(
+        fila_monedas, textvariable=moneda_destino_var, values=monedas,
+        state="readonly", width=10
+    ).grid(row=1, column=1, sticky="ew", padx=(12, 0), pady=(4, 0))
+
+    empleado_marco = ttk.Frame(conversion)
+    empleado_marco.grid(row=3, column=0, columnspan=2, sticky="ew", pady=(0, 12))
+    empleado_marco.columnconfigure(3, weight=1)
     criterio_var = tk.StringVar(value="ID")
+    ttk.Label(empleado_marco, text="Buscar empleado por").grid(
+        row=0, column=0, sticky="w", padx=(0, 8)
+    )
     ttk.Radiobutton(
         empleado_marco, text="ID", variable=criterio_var, value="ID",
         command=lambda: limpiar_empleado()
-    ).grid(row=0, column=0, sticky="w", padx=(0, 12))
+    ).grid(row=0, column=1, sticky="w", padx=(0, 8))
     ttk.Radiobutton(
         empleado_marco, text="RUT", variable=criterio_var, value="RUT",
         command=lambda: limpiar_empleado()
-    ).grid(row=0, column=1, sticky="w", padx=(0, 12))
+    ).grid(row=0, column=2, sticky="w", padx=(0, 8))
     busqueda_var = tk.StringVar()
-    ttk.Entry(empleado_marco, textvariable=busqueda_var, width=24).grid(
-        row=0, column=2, sticky="ew", padx=(0, 8)
+    ttk.Entry(empleado_marco, textvariable=busqueda_var, width=22).grid(
+        row=0, column=3, sticky="ew", padx=(0, 8)
     )
-    empleado_marco.columnconfigure(2, weight=1)
     resultado_empleado_var = tk.StringVar()
-    ttk.Label(
-        empleado_marco, textvariable=resultado_empleado_var,
-        style="Subtitulo.TLabel"
-    ).grid(row=1, column=0, columnspan=3, sticky="w", pady=(8, 0))
+    ttk.Label(empleado_marco, textvariable=resultado_empleado_var, style="Subtitulo.TLabel").grid(
+        row=1, column=0, columnspan=5, sticky="w", pady=(8, 0)
+    )
 
     datos_empleado = {"salario": None}
     origen_actual = {"valor": "manual"}
     estado_var = tk.StringVar()
     ttk.Label(
-        contenedor, textvariable=estado_var, style="Subtitulo.TLabel"
-    ).pack(anchor="w", pady=(8, 0))
+        conversion, textvariable=estado_var, style="Subtitulo.TLabel"
+    ).grid(row=5, column=0, columnspan=2, sticky="w", pady=(4, 0))
 
     def limpiar_empleado(*_args):
         datos_empleado["salario"] = None
@@ -77,13 +109,13 @@ def abrir_herramientas(app):
             limpiar_empleado()
             busqueda_var.set("")
             origen_actual["valor"] = origen
-        monto_marco.pack_forget()
-        empleado_marco.pack_forget()
         estado_var.set("")
         if origen == "manual":
-            monto_marco.pack(fill="x", pady=(0, 10))
+            monto_entrada.configure(state="normal")
+            empleado_marco.grid_remove()
         else:
-            empleado_marco.pack(fill="x", pady=(0, 10))
+            monto_entrada.configure(state="readonly")
+            empleado_marco.grid()
 
     busqueda_var.trace_add("write", limpiar_empleado)
 
@@ -127,31 +159,13 @@ def abrir_herramientas(app):
     ttk.Button(
         empleado_marco, text="Buscar", style="Secundaria.TButton",
         command=buscar_empleado
-    ).grid(row=0, column=3, sticky="e")
+    ).grid(row=0, column=4, sticky="e")
     cambiar_origen()
-
-    monedas = ("CLP", "USD", "EUR")
-    fila_monedas = ttk.Frame(contenedor)
-    fila_monedas.pack(fill="x", pady=(4, 14))
-    moneda_base_var = tk.StringVar(value="CLP")
-    moneda_destino_var = tk.StringVar(value="USD")
-    ttk.Label(fila_monedas, text="Moneda base").grid(row=0, column=0, sticky="w")
-    ttk.Combobox(
-        fila_monedas, textvariable=moneda_base_var, values=monedas,
-        state="readonly", width=12
-    ).grid(row=1, column=0, sticky="w", pady=(4, 0))
-    ttk.Label(fila_monedas, text="Convertir a").grid(
-        row=0, column=1, sticky="w", padx=(24, 0)
-    )
-    ttk.Combobox(
-        fila_monedas, textvariable=moneda_destino_var, values=monedas,
-        state="readonly", width=12
-    ).grid(row=1, column=1, sticky="w", padx=(24, 0), pady=(4, 0))
 
     resultado_var = tk.StringVar()
     ttk.Label(
-        contenedor, textvariable=resultado_var, style="Seccion.TLabel"
-    ).pack(anchor="w", pady=(10, 4))
+        conversion, textvariable=resultado_var, style="Seccion.TLabel"
+    ).grid(row=4, column=1, sticky="e", pady=(4, 0))
 
     def convertir():
         if origen_var.get() == "empleado" and datos_empleado["salario"] is None:
@@ -199,9 +213,9 @@ def abrir_herramientas(app):
             boton_convertir.configure(state="normal")
 
     boton_convertir = ttk.Button(
-        contenedor, text="Convertir", style="Accion.TButton", command=convertir
+        conversion, text="Convertir", style="Accion.TButton", command=convertir
     )
-    boton_convertir.pack(anchor="w", pady=(0, 18))
+    boton_convertir.grid(row=4, column=0, sticky="w", pady=(4, 0))
 
     ttk.Separator(contenedor, orient="horizontal").pack(fill="x", pady=12)
 
