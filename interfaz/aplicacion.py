@@ -9,8 +9,8 @@ class EcoTechApp:
     def __init__(self, root):
         self.root = root
         self.root.title("Gestor de EcoTech")
-        self.root.geometry("760x480")
-        self.root.minsize(680, 440)
+        self.root.geometry("900x600")
+        self.root.minsize(760, 520)
 
         self._configurar_estilos()
         self._construir_menu()
@@ -18,12 +18,19 @@ class EcoTechApp:
     def _configurar_estilos(self):
         estilo = ttk.Style()
         try:
-            estilo.theme_use("vista" if "vista" in estilo.theme_names() else "clam")
+            estilo.theme_use("clam")
         except tk.TclError:
             pass
-        estilo.configure("Titulo.TLabel", font=("Segoe UI", 17))
-        estilo.configure("Accion.TButton", font=("Segoe UI", 11), padding=(12, 8))
-        estilo.configure("Estado.TLabel", padding=(8, 5))
+        self.root.configure(background="#f1f3ed")
+        estilo.configure("TFrame", background="#f1f3ed")
+        estilo.configure("TLabel", background="#f1f3ed", foreground="#26352d", font=("Segoe UI", 10))
+        estilo.configure("Titulo.TLabel", font=("Segoe UI", 25, "bold"), foreground="#183b2c")
+        estilo.configure("Subtitulo.TLabel", font=("Segoe UI", 11), foreground="#627168")
+        estilo.configure("Seccion.TLabel", font=("Segoe UI", 12, "bold"), foreground="#183b2c")
+        estilo.configure("Accion.TButton", font=("Segoe UI", 11, "bold"), padding=(18, 14), background="#1c6246", foreground="#ffffff")
+        estilo.map("Accion.TButton", background=[("active", "#164c36"), ("pressed", "#123d2c")])
+        estilo.configure("Secundaria.TButton", font=("Segoe UI", 10), padding=(12, 8))
+        estilo.configure("Estado.TLabel", padding=(10, 7), background="#dce6dc", foreground="#34463a")
 
     def _construir_menu(self):
         menu.construir_menu(self)
@@ -32,11 +39,11 @@ class EcoTechApp:
         """Actualiza la barra de estado inferior."""
         self.log_var.set(f"[LOG] {mensaje}")
 
-    def _nueva_ventana(self, titulo, geometria="560x520"):
+    def _nueva_ventana(self, titulo, geometria="640x600"):
         ventana = tk.Toplevel(self.root)
         ventana.title(titulo)
         ventana.geometry(geometria)
-        ventana.minsize(460, 360)
+        ventana.minsize(520, 440)
         ventana.transient(self.root)
         return ventana
 

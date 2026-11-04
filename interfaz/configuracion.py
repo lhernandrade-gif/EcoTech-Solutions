@@ -1,9 +1,10 @@
 import os
 from dotenv import load_dotenv
-from datetime import date
+from decimal import Decimal, InvalidOperation
 
 import clases
 from clases import *
+import utilidades
 
 
 load_dotenv()
@@ -71,3 +72,60 @@ REPOSITORIOS = {
     "Proyectos": ProyectoRepositorio,
     "Registros de tiempo": RegistroTiempoRepositorio,
 }
+
+
+CAMPOS_REQUERIDOS = {
+    "Empleados": {"primer_nombre", "primer_apellido", "segundo_apellido", "rut", "email"},
+    "Departamentos": {"nombre"},
+    "Proyectos": {"nombre"},
+    "Registros de tiempo": {"fecha", "horas_trabajadas", "empleado_id", "proyecto_id"},
+}
+
+IDS_LISTA = {"lista_empleados"}
+IDS_NUMERICOS = {"gerente", "salario", "empleado_id", "proyecto_id"}
+
+
+def crear_entidad(entidad, valores, registro_id=None):
+    datos = {}
+    for atributo, valor in valores.items():
+        valor = valor.strip() if isinstance(valor, str) else valor
+        if atributo in IDS_LISTA:
+            if not valor:
+                datos[atributo] = []
+                continue
+            ids = utilidades.validar_y_convertir_ingreso_ids(valor)
+            if ids is False:
+                raise ValueError("Los IDs deben ser números separados por comas.")
+            datos[atributo] = ids
+        elif valor == "" or valor is None:
+            if atributo in CAMPOS_REQUERIDOS[entidad]:
+                etiqueta = next((nombre for nombre, campo in ENTIDADES[entidad] if campo == atributo), atributo)
+                raise ValueError(f"El campo '{etiqueta}' es obligatorio.")
+            datos[atributo] = None
+        elif atributo in IDS_NUMERICOS:
+            try:
+                datos[atributo] = int(valor)
+            except (TypeError, ValueError) as error:
+                raise ValueError(f"El campo '{atributo}' debe ser un número entero.") from error
+            if atributo in {"gerente", "empleado_id", "proyecto_id"} and datos[atributo] <= 0:
+                raise ValueError(f"El campo '{atributo}' debe ser mayor que cero.")
+            if atributo == "salario" and datos[atributo] < 0:
+                raise ValueError("El salario no puede ser negativo.")
+        elif atributo == "horas_trabajadas":
+            try:
+                datos[atributo] = Decimal(valor)
+            except (InvalidOperation, TypeError, ValueError) as error:
+                raise ValueError("Las horas deben ser un número, por ejemplo 7.5.") from error
+            if not datos[atributo].is_finite() or not 0 < datos[atributo] <= 24:
+                raise ValueError("Las horas deben ser mayores que cero y no superar 24.")
+        elif atributo in {"fecha", "fecha_inicio_contrato", "fecha_proyecto"}:
+            fecha = utilidades.validar_y_convertir_fecha(valor)
+            if fecha is False:
+                raise ValueError(f"La fecha de '{atributo}' debe tener formato AAAA-MM-DD o DD-MM-AAAA.")
+            datos[atributo] = fecha
+        else:
+            datos[atributo] = valor
+
+    if registro_id is not None:
+        datos[IDS[entidad]] = registro_id
+    return CLASES[entidad](**datos)

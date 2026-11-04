@@ -19,12 +19,13 @@ def mostrar_datos(objeto) -> str | None:
     #print("\n".join(lista))
     return "\n".join(lista)
 
-def validar_y_normalizar_rut(rut: str) -> str | bool:
+def validar_y_normalizar_rut(rut: str | None) -> str | bool | None:
+    if rut is None:
+        return None
     rut = rut.replace(".", "").replace("-", "").strip().upper()
 
     if not rut:
-        #print("No se han ingresado datos.")
-        return False
+        return None
 
     if not rut.isalnum():
         #print("El RUT contiene caracteres inválidos.")
@@ -83,7 +84,11 @@ def validar_patente(patente: str) -> bool:
     return len(patente) == 6 and (patente[:2].isalpha() and patente[2:].isdigit()) or (patente[:4].isalpha() and patente[4:].isdigit())
 
 #Función generada con IA y refactorizada para validar una fecha y devolverla en formato datetime.
-def validar_y_convertir_fecha(fecha: str) -> date | bool:
+def validar_y_convertir_fecha(fecha: str | date | None) -> date | bool | None:
+    if fecha is None or fecha == "":
+        return None
+    if isinstance(fecha, date):
+        return fecha
     formatos = ("%Y-%m-%d", "%d-%m-%Y")
     for formato in formatos:
         try:
@@ -94,12 +99,14 @@ def validar_y_convertir_fecha(fecha: str) -> date | bool:
             continue
     return False
 
-def validar_y_convertir_ingreso_ids(ids: str) -> list | bool:
-    lista_ids = ids.split(",")
+def validar_y_convertir_ingreso_ids(ids: str | list | None) -> list | bool:
+    if ids is None or ids == "":
+        return []
+    lista_ids = ids if isinstance(ids, list) else ids.split(",")
     for id in lista_ids:
-        if not id.isdigit():
+        if not str(id).strip().isdigit():
             return False
-    return lista_ids
+    return [int(id) for id in lista_ids]
 
 #Validación de monto sugerida por IA. No se modificó el output.
 #Pendiente añadir verificación de separador de decimales (por ej. si el usuario ingresa , en lugar de .)
