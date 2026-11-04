@@ -1,5 +1,6 @@
 from typing import Any
 from .RegistroTiempo import RegistroTiempo
+from .BaseDatos import BaseDatos
 
 class RegistroTiempoRepositorio:
     def __init__(self, sesion: BaseDatos) -> None:
@@ -18,7 +19,7 @@ class RegistroTiempoRepositorio:
             #registro_tiempo.registro_tiempo_id = cursor.lastrowid
             #return registro_tiempo
 
-    def buscar_por_id(self, registro_tiempo: RegistroTiempo) -> RegistroTiempo:
+    def buscar_por_id(self, registro_tiempo: RegistroTiempo) -> RegistroTiempo | None:
         with self.config.conectar() as conexion:
             cursor = conexion.cursor()
             cursor.execute('''SELECT registro_tiempo_id, fecha, horas_trabajadas, descripcion_tareas, empleado_id, proyecto_id
@@ -26,7 +27,7 @@ class RegistroTiempoRepositorio:
                               WHERE registro_tiempo_id = %s''', (registro_tiempo.registro_tiempo_id,))
             fila: tuple[Any,...] | None = cursor.fetchone()
             if fila is None: return None
-            return RegistroTiempo(registro_tiempo_id=fila[0], fecha=fila[1], horas_trabajadas=fila[2], descripcion_tareas=fila[3], id_empleado=fila[4], id_proyecto=fila[5])
+            return RegistroTiempo(registro_tiempo_id=fila[0], fecha=fila[1], horas_trabajadas=fila[2], descripcion_tareas=fila[3], empleado_id=fila[4], proyecto_id=fila[5])
 
     def actualizar(self, registro_tiempo: RegistroTiempo) -> None:
         with self.config.conectar() as conexion:
