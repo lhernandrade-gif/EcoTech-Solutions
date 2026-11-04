@@ -17,7 +17,7 @@ Crea un archivo llamado `.env` en el directorio raíz del proyecto y agrega las 
 DB_HOST=localhost
 DB_USER=tu_usuario
 DB_PASSWORD=tu_contraseña
-DB_NAME=mi_proyecto_db
+DB_NAME=ecotech
 ```
 
 ### 4. Configuración de Claves API (API Keys)
