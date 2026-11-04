@@ -81,7 +81,7 @@ def validar_password_usuario (password: str) -> bool:
 
 #Adaptado de código en módulos de la unidad 3
 def validar_patente(patente: str) -> bool:
-    return len(patente) == 6 and (patente[:2].isalpha() and patente[2:].isdigit()) or (patente[:4].isalpha() and patente[4:].isdigit())
+    return len(patente) == 6 and ((patente[:2].isalpha() and patente[2:].isdigit()) or (patente[:4].isalpha() and patente[4:].isdigit()))
 
 #Función generada con IA y refactorizada para validar una fecha y devolverla en formato datetime.
 def validar_y_convertir_fecha(fecha: str | date | None) -> date | bool | None:
