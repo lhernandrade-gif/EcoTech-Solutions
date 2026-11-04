@@ -1,5 +1,6 @@
 from typing import Any
 from .Departamento import Departamento
+from .BaseDatos import BaseDatos
 import utilidades
 
 class DepartamentoRepositorio:
@@ -14,7 +15,7 @@ class DepartamentoRepositorio:
                            VALUES (%s, %s)
                            ''', (departamento.nombre, departamento.gerente))
             departamento.departamento_id = cursor.lastrowid
-            for empleado in departamento.lista_empleados:
+            for empleado in departamento.lista_empleados or []:
                 cursor.execute('''
                                INSERT INTO departamento_empleados (departamento_id, empleado_id)
                                VALUES (%s, %s)
@@ -22,21 +23,26 @@ class DepartamentoRepositorio:
             conexion.commit()
             #return empleado
 
-    def buscar_por_id(self, departamento: Departamento) -> Departamento:
+    def buscar_por_id(self, departamento: Departamento) -> Departamento | None:
         with self.config.conectar() as conexion:
             cursor = conexion.cursor()
-            cursor.execute('''SELECT d.departamento_id, d.nombre, d.gerente, de.empleado_id
-                              FROM departamentos AS d
-                              JOIN departamento_empleados AS de
-                              ON d.departamento_id = de.departamento_id
-                              WHERE d.departamento_id = %s''', (departamento.departamento_id,))
-            filas: tuple[tuple[Any,...]] | None = cursor.fetchall()
-            resultados_consulta = []
-            for fila in filas:
-                resultados_consulta.append({"departamento_id": fila[0], "nombre": fila[1], "gerente": fila[2], "empleado_id": fila[3]})
-            if not resultados_consulta:
+            cursor.execute('''SELECT departamento_id, nombre, gerente
+                              FROM departamentos
+                              WHERE departamento_id = %s''', (departamento.departamento_id,))
+            fila: tuple[Any, ...] | None = cursor.fetchone()
+            if fila is None:
                 return None
-            return resultados_consulta
+            cursor.execute('''SELECT empleado_id
+                              FROM departamento_empleados
+                              WHERE departamento_id = %s
+                              ORDER BY empleado_id''', (fila[0],))
+            empleados = [fila_empleado[0] for fila_empleado in cursor.fetchall()]
+            return Departamento(
+                departamento_id=fila[0],
+                nombre=fila[1],
+                gerente=fila[2],
+                lista_empleados=empleados,
+            )
 
     def actualizar(self, departamento: Departamento) -> None:
         with self.config.conectar() as conexion:
@@ -49,7 +55,7 @@ class DepartamentoRepositorio:
                               FROM departamento_empleados
                               WHERE departamento_id = %s''',
                            (departamento.departamento_id,))
-            for empleado in departamento.lista_empleados:
+            for empleado in departamento.lista_empleados or []:
                 cursor.execute('''INSERT INTO departamento_empleados (departamento_id, empleado_id)
                                   VALUES (%s, %s)
                                ''', (departamento.departamento_id, empleado))

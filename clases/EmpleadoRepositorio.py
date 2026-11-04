@@ -19,7 +19,7 @@ class EmpleadoRepositorio:
             #empleado.empleado_id = cursor.lastrowid
             #return empleado
 
-    def buscar_por_id(self, empleado: Empleado) -> Empleado:
+    def buscar_por_id(self, empleado: Empleado) -> Empleado | None:
         with self.config.conectar() as conexion:
             cursor = conexion.cursor()
             cursor.execute('''SELECT empleado_id, primer_nombre, segundo_nombre, primer_apellido, segundo_apellido, rut, direccion, telefono, email, fecha_inicio_contrato, salario_CLP
