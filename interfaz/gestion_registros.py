@@ -1,10 +1,10 @@
 import tkinter as tk
 from tkinter import ttk, messagebox
 
-import pymysql
 import utilidades
 
 from .configuracion import ENTIDADES, IDS, REPOSITORIOS, crear_entidad, sesion_actual
+from .errores import mostrar_error, texto_error
 
 
 def abrir_buscar(app):
@@ -119,15 +119,9 @@ def _abrir_formulario_id(app, titulo, texto_boton, accion):
                 repositorio.eliminar(objeto)
                 app.registrar_log(f"Registro {entidad.get()} ID {registro_id} eliminado.")
                 mostrar_resultado("Registro eliminado correctamente.")
-        except (ValueError, TypeError) as error:
-            messagebox.showerror("Revisa los datos", str(error), parent=ventana)
-            app.registrar_log(f"Datos inválidos: {error}")
-        except pymysql.MySQLError as error:
-            messagebox.showerror("Error de base de datos", str(error), parent=ventana)
-            app.registrar_log(f"Error de base de datos: {error}")
         except Exception as error:
-            messagebox.showerror("No se pudo completar la operación", str(error), parent=ventana)
-            app.registrar_log(f"Error en operación: {error}")
+            app.registrar_log(f"Error en operación: {texto_error(error)}")
+            mostrar_error(ventana, error)
 
     dibujar_campos()
     ttk.Button(

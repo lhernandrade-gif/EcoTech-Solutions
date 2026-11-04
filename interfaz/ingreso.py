@@ -1,9 +1,8 @@
 import tkinter as tk
 from tkinter import ttk, messagebox
 
-import pymysql
-
 from .configuracion import ENTIDADES, REPOSITORIOS, crear_entidad, sesion_actual
+from .errores import mostrar_error, texto_error
 
 
 def abrir_ingresar(app):
@@ -47,15 +46,9 @@ def abrir_ingresar(app):
             messagebox.showinfo("Registro guardado", "La información se guardó correctamente.", parent=ventana)
             for entrada in entradas.values():
                 entrada.delete(0, tk.END)
-        except (ValueError, TypeError) as error:
-            messagebox.showerror("Revisa los datos", str(error), parent=ventana)
-            app.registrar_log(f"Datos inválidos: {error}")
-        except pymysql.MySQLError as error:
-            messagebox.showerror("Error de base de datos", str(error), parent=ventana)
-            app.registrar_log(f"Error de base de datos: {error}")
         except Exception as error:
-            messagebox.showerror("No se pudo guardar", str(error), parent=ventana)
-            app.registrar_log(f"No se pudo guardar: {error}")
+            app.registrar_log(f"No se pudo guardar: {texto_error(error)}")
+            mostrar_error(ventana, error)
 
     dibujar_campos()
     ttk.Button(

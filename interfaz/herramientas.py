@@ -1,14 +1,15 @@
 import threading
 import tkinter as tk
 from tkinter import ttk
-
-import pymysql
+from datetime import date
 
 import utilidades
 from clases.Empleado import Empleado
 from clases.EmpleadoRepositorio import EmpleadoRepositorio
 from clases.ServicioCambioDivisa import cambio_divisa
+from clases.ServicioDatosClimaticos import obtener_datos_climaticos
 from .configuracion import sesion_actual
+from .errores import texto_error
 
 
 def abrir_herramientas(app):
@@ -150,12 +151,8 @@ def abrir_herramientas(app):
                 f"{nombre} · Salario cargado: {empleado.salario} CLP"
             )
             estado_var.set("")
-        except (ValueError, TypeError) as error:
-            resultado_empleado_var.set(str(error))
-        except pymysql.MySQLError as error:
-            resultado_empleado_var.set(f"Error de base de datos: {error}")
         except Exception as error:
-            resultado_empleado_var.set(f"No se pudo buscar el empleado: {error}")
+            resultado_empleado_var.set(texto_error(error))
 
     ttk.Button(
         empleado_marco, text="Buscar", style="Secundaria.TButton",
@@ -189,7 +186,8 @@ def abrir_herramientas(app):
                 if convertido is None:
                     raise ValueError("El servicio no devolvió un monto convertido.")
             except Exception as error:
-                ventana.after(0, lambda mensaje=str(error): conversion_fallida(mensaje))
+                mensaje = texto_error(error)
+                ventana.after(0, lambda: conversion_fallida(mensaje))
             else:
                 ventana.after(
                     0,
@@ -223,4 +221,92 @@ def abrir_herramientas(app):
     ttk.Label(
         contenedor, text="Consulta de Datos Climáticos", style="Seccion.TLabel"
     ).pack(anchor="w", pady=(0, 10))
-    ttk.Frame(contenedor).pack(fill="both", expand=True)
+
+    clima = ttk.Frame(contenedor)
+    clima.pack(fill="x")
+    clima.columnconfigure(1, weight=1)
+    clima.columnconfigure(3, weight=1)
+
+    fecha_var = tk.StringVar(value=date.today().isoformat())
+    ciudad_var = tk.StringVar()
+    ttk.Label(clima, text="Fecha (AAAA-MM-DD)").grid(
+        row=0, column=0, sticky="w", padx=(0, 8)
+    )
+    ttk.Label(clima, text="Ciudad").grid(
+        row=0, column=2, sticky="w", padx=(18, 8)
+    )
+    ttk.Entry(clima, textvariable=fecha_var, width=18).grid(
+        row=1, column=0, columnspan=2, sticky="ew"
+    )
+    ttk.Entry(clima, textvariable=ciudad_var).grid(
+        row=1, column=2, columnspan=2, sticky="ew", padx=(18, 0)
+    )
+
+    clima_estado_var = tk.StringVar()
+    ttk.Label(
+        clima, textvariable=clima_estado_var, style="Subtitulo.TLabel",
+        wraplength=680
+    ).grid(row=3, column=0, columnspan=4, sticky="w", pady=(8, 2))
+
+    campos_clima = (
+        ("Condición", "condicion"),
+        ("Temperatura", "temperatura"),
+        ("Humedad relativa", "humedad"),
+        ("Velocidad del viento", "viento"),
+    )
+    valores_clima = {clave: tk.StringVar() for _, clave in campos_clima}
+    for indice, (etiqueta, clave) in enumerate(campos_clima):
+        fila = 4 + indice // 2
+        columna = (indice % 2) * 2
+        ttk.Label(clima, text=etiqueta).grid(
+            row=fila, column=columna, sticky="w", pady=(6, 0),
+            padx=(0, 8 if columna == 0 else 0)
+        )
+        ttk.Label(
+            clima, textvariable=valores_clima[clave], style="Subtitulo.TLabel"
+        ).grid(
+            row=fila, column=columna + 1, sticky="w", pady=(6, 0),
+            padx=(0, 10 if columna == 0 else 0)
+        )
+
+    def mostrar_datos_climaticos(datos):
+        condicion, temperatura, humedad, viento = datos
+        valores_clima["condicion"].set(str(condicion))
+        valores_clima["temperatura"].set(f"{temperatura} °C")
+        valores_clima["humedad"].set(f"{humedad} %")
+        valores_clima["viento"].set(f"{viento} km/h")
+        clima_estado_var.set("")
+        boton_clima.configure(state="normal")
+
+    def fallo_clima(mensaje):
+        clima_estado_var.set(mensaje)
+        boton_clima.configure(state="normal")
+
+    def consultar_clima():
+        fecha = fecha_var.get().strip()
+        ciudad = ciudad_var.get().strip()
+        for variable in valores_clima.values():
+            variable.set("")
+        boton_clima.configure(state="disabled")
+        clima_estado_var.set("Consultando datos climáticos…")
+
+        def consultar():
+            try:
+                datos = obtener_datos_climaticos(fecha, ciudad)
+                if datos is None:
+                    mensaje = "No se encontraron datos para esa ciudad y fecha."
+                    ventana.after(0, lambda: fallo_clima(mensaje))
+                    return
+            except Exception as error:
+                mensaje = texto_error(error)
+                ventana.after(0, lambda: fallo_clima(mensaje))
+            else:
+                ventana.after(0, lambda: mostrar_datos_climaticos(datos))
+
+        threading.Thread(target=consultar, daemon=True).start()
+
+    boton_clima = ttk.Button(
+        clima, text="Consultar clima", style="Secundaria.TButton",
+        command=consultar_clima
+    )
+    boton_clima.grid(row=2, column=0, sticky="w", pady=(10, 0))
