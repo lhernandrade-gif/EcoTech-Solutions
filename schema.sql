@@ -4,7 +4,9 @@
 -- Configuración de la Base de Datos
 -- ============================================================
 
-DROP DATABASE IF EXISTS ecotech;
+-- Utilizar DROP DATABASE si se desea reiniciar la base de datos junto con sus datos de prueba.
+-- Tener en cuenta que esto eliminará la base de datos actual de ecotech en su totalidad.
+-- DROP DATABASE IF EXISTS ecotech;
 
 CREATE DATABASE ecotech
     CHARACTER SET utf8mb4 -- Establece compatibilidad extendida con caracteres Unicode
