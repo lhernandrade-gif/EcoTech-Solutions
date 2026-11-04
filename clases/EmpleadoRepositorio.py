@@ -29,6 +29,16 @@ class EmpleadoRepositorio:
             if fila is None: return None
             return Empleado(empleado_id=fila[0], primer_nombre=fila[1], segundo_nombre=fila[2], primer_apellido=fila[3], segundo_apellido=fila[4], rut=fila[5], direccion=fila[6], telefono=fila[7], email=fila[8], fecha_inicio_contrato=fila[9], salario=fila[10])
 
+    def buscar_por_rut(self, empleado: Empleado) -> Empleado | None:
+        with self.config.conectar() as conexion:
+            cursor = conexion.cursor()
+            cursor.execute('''SELECT empleado_id, primer_nombre, segundo_nombre, primer_apellido, segundo_apellido, rut, direccion, telefono, email, fecha_inicio_contrato, salario
+                              FROM empleados
+                              WHERE rut = %s''', (empleado.rut,))
+            fila: tuple[Any, ...] | None = cursor.fetchone()
+            if fila is None: return None
+            return Empleado(empleado_id=fila[0], primer_nombre=fila[1], segundo_nombre=fila[2], primer_apellido=fila[3], segundo_apellido=fila[4], rut=fila[5], direccion=fila[6], telefono=fila[7], email=fila[8], fecha_inicio_contrato=fila[9], salario=fila[10])
+
     def actualizar(self, empleado: Empleado) -> None:
         with self.config.conectar() as conexion:
             cursor = conexion.cursor()
