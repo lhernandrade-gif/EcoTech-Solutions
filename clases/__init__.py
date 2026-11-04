@@ -7,9 +7,9 @@ from .Proyecto import Proyecto
 from .ProyectoRepositorio import ProyectoRepositorio
 from .RegistroTiempo import RegistroTiempo
 from .RegistroTiempoRepositorio import RegistroTiempoRepositorio
-#from .ServicioCambioDivisa import ServicioCambioDivisa
-#from .ServicioDatosClimaticos import ServicioDatosClimaticos
-#from .Usuario import Usuario
-#from .UsuarioRepositorio import UsuarioRepositorio
-#from .Vehiculo import Vehiculo
-#from .VehiculoRepositorio import VehiculoRepositorio
+from .ServicioCambioDivisa import ServicioCambioDivisa
+from .ServicioDatosClimaticos import ServicioDatosClimaticos
+from .Usuario import Usuario
+from .UsuarioRepositorio import UsuarioRepositorio
+from .Vehiculo import Vehiculo
+from .VehiculoRepositorio import VehiculoRepositorio

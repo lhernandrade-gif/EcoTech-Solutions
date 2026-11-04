@@ -23,7 +23,7 @@ class Usuario:
                     raise ValueError("La contraseña debe incluir entre 8 y 14 caracteres, y al menos 1 letra, 1 número y 1 símbolo.")
             if password_usuario:
                 self.password_hash = hashlib.sha256(password_usuario.encode('utf-8')).hexdigest()
-            else
+            else:
                 self.password_hash = password_hash
         except ValueError as e:
             logging.exception(e)

@@ -20,7 +20,7 @@ class Vehiculo:
             if patente != None:
                 if not validar_patente(patente.strip()):
                     raise ValueError("Formato de patente inválido.")
-            self.patente = patente.strip()
+            self.patente = patente.strip() if patente is not None else None
             if tipo != None:
                 if tipo.upper() not in tipo_vehiculo:
                     raise ValueError("Tipo de vehiculo inválido. Introducir solo caracteres alfabéticos sin tildes. Entradas válidas: Auto, SUV, camioneta, furgon, van.")
