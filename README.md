@@ -34,5 +34,5 @@ TOKEN_CLIMA=tu_clave_api
 Desde el terminal, ejecutar en el directorio raíz del proyecto el comando `pip install -r requirements.txt`.
 
 ### 6. Ejecutar el programa
-Desde el terminal, ejecutar en el directorio raíz del proyecto el comando `main.py`.
+Desde el terminal, ejecutar en el directorio raíz del proyecto el comando `python main.py`.
 Para ingresar al programa con el usuario de prueba obtenido de `schema.sql`, utiliza el usuario `Admin`, contraseña `@Password`.
