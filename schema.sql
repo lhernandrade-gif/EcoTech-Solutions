@@ -499,6 +499,29 @@ VALUES
     ('Mercedes-Benz Vito', 'CD5678', 'VAN', '2023-06-10');
 
 -- ============================================================
+-- Verificación básica
+-- ============================================================
+
+SELECT * FROM vehiculos;
+
+-- ============================================================
+-- Tabla: usuarios
+-- ============================================================
+
+CREATE TABLE usuarios (
+    usuario_id INT AUTO_INCREMENT PRIMARY KEY,
+    nombre_usuario VARCHAR(12) NOT NULL UNIQUE,
+    password_hash CHAR(64) NOT NULL
+);
+
+-- ============================================================
+-- Datos de prueba: usuarios (1 registro)
+-- ============================================================
+
+INSERT INTO usuarios (nombre_usuario, password_hash)
+VALUES ("Admin", "598b974f740ed2c3f1d0d556cf815daf6f1c6558098687184fa7cfb0040ef502");
+
+-- ============================================================
 -- Consulta: registros con nombres de empleados y proyectos
 -- ============================================================
 
