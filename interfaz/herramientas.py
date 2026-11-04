@@ -3,7 +3,6 @@ import tkinter as tk
 from tkinter import ttk
 from datetime import date
 
-import utilidades
 from clases.Empleado import Empleado
 from clases.EmpleadoRepositorio import EmpleadoRepositorio
 from clases.ServicioCambioDivisa import cambio_divisa
@@ -170,9 +169,6 @@ def abrir_herramientas(app):
             estado_var.set("Busca primero un empleado con salario registrado.")
             return
         monto = monto_var.get().strip()
-        if not utilidades.validar_monto(monto):
-            estado_var.set("Ingresa un monto numérico válido, igual o mayor que cero.")
-            return
 
         moneda_base = moneda_base_var.get()
         moneda_destino = moneda_destino_var.get()
