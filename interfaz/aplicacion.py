@@ -8,12 +8,12 @@ from .configuracion import ENTIDADES
 class EcoTechApp:
     def __init__(self, root):
         self.root = root
-        self.root.title("Gestor de EcoTech")
-        self.root.geometry("900x600")
-        self.root.minsize(760, 520)
+        self.root.title("Gestor de EcoTech | Acceso")
+        self.root.geometry("480x500")
+        self.root.minsize(420, 440)
 
         self._configurar_estilos()
-        self._construir_menu()
+        self._construir_login()
 
     def _configurar_estilos(self):
         estilo = ttk.Style()
@@ -34,6 +34,18 @@ class EcoTechApp:
 
     def _construir_menu(self):
         menu.construir_menu(self)
+
+    def _construir_login(self):
+        from .login import construir_login
+        construir_login(self)
+
+    def acceso_concedido(self):
+        for widget in self.root.winfo_children():
+            widget.destroy()
+        self.root.title("Gestor de EcoTech")
+        self.root.geometry("900x600")
+        self.root.minsize(760, 520)
+        self._construir_menu()
 
     def registrar_log(self, mensaje):
         """Actualiza la barra de estado inferior."""
