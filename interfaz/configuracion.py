@@ -47,6 +47,12 @@ ENTIDADES = {
         ("ID del empleado", "empleado_id"),
         ("ID del proyecto", "proyecto_id"),
     ],
+    "Vehículos": [
+        ("Modelo", "modelo"),
+        ("Patente", "patente"),
+        ("Tipo (AUTO, SUV, CAMIONETA, FURGON, VAN)", "tipo"),
+        ("Fecha de adquisición (AAAA-MM-DD)", "fecha_adquisicion"),
+    ],
 }
 
 
@@ -55,6 +61,7 @@ IDS = {
     "Departamentos": "departamento_id",
     "Proyectos": "proyecto_id",
     "Registros de tiempo": "registro_tiempo_id",
+    "Vehículos": "vehiculo_id",
 }
 
 
@@ -63,6 +70,7 @@ CLASES = {
     "Departamentos": Departamento,
     "Proyectos": Proyecto,
     "Registros de tiempo": RegistroTiempo,
+    "Vehículos": Vehiculo,
 }
 
 
@@ -71,6 +79,7 @@ REPOSITORIOS = {
     "Departamentos": DepartamentoRepositorio,
     "Proyectos": ProyectoRepositorio,
     "Registros de tiempo": RegistroTiempoRepositorio,
+    "Vehículos": VehiculoRepositorio,
 }
 
 
@@ -79,6 +88,7 @@ CAMPOS_REQUERIDOS = {
     "Departamentos": {"nombre"},
     "Proyectos": {"nombre"},
     "Registros de tiempo": {"fecha", "horas_trabajadas", "empleado_id", "proyecto_id"},
+    "Vehículos": {"fecha_adquisicion"},
 }
 
 IDS_LISTA = {"lista_empleados"}
@@ -118,7 +128,9 @@ def crear_entidad(entidad, valores, registro_id=None):
                 raise ValueError("Las horas deben ser un número, por ejemplo 7.5.") from error
             if not datos[atributo].is_finite() or not 0 < datos[atributo] <= 24:
                 raise ValueError("Las horas deben ser mayores que cero y no superar 24.")
-        elif atributo in {"fecha", "fecha_inicio_contrato", "fecha_proyecto"}:
+        elif atributo == "tipo" and entidad == "Vehículos":
+            datos[atributo] = valor.upper()
+        elif atributo in {"fecha", "fecha_inicio_contrato", "fecha_proyecto", "fecha_adquisicion"}:
             fecha = utilidades.validar_y_convertir_fecha(valor)
             if fecha is False:
                 raise ValueError(f"La fecha de '{atributo}' debe tener formato AAAA-MM-DD o DD-MM-AAAA.")
@@ -128,4 +140,7 @@ def crear_entidad(entidad, valores, registro_id=None):
 
     if registro_id is not None:
         datos[IDS[entidad]] = registro_id
+        if entidad == "Vehículos" and "fecha_adquisicion" not in datos:
+            # Vehiculo necesita fecha incluso para operaciones que solo usan el ID.
+            datos["fecha_adquisicion"] = utilidades.validar_y_convertir_fecha("2000-01-01")
     return CLASES[entidad](**datos)
