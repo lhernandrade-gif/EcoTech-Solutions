@@ -35,3 +35,4 @@ Desde el terminal, ejecutar en el directorio raíz del proyecto el comando `pip 
 
 ### 6. Ejecutar el programa
 Desde el terminal, ejecutar en el directorio raíz del proyecto el comando `main.py`.
+Para ingresar al usuario de prueba obtenido de `schema.sql`, utilice el usuario `Admin`, contraseña `@Password`.

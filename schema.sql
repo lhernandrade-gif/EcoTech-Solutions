@@ -519,7 +519,7 @@ CREATE TABLE usuarios (
 -- ============================================================
 
 INSERT INTO usuarios (nombre_usuario, password_hash)
-VALUES ("Admin", "598b974f740ed2c3f1d0d556cf815daf6f1c6558098687184fa7cfb0040ef502");
+VALUES ("Admin", "797daa27cbae358195d33fe911b1d9bf24ec444dfcf856a552ca13fd98119adf");
 
 -- ============================================================
 -- Consulta: registros con nombres de empleados y proyectos
