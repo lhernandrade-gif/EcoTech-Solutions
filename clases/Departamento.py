@@ -13,10 +13,3 @@ class Departamento:
         self.gerente = gerente
         #Validación de entrada de datos pendiente en lista_empleados
         self.lista_empleados = lista_empleados
-
-    def asignar_empleado(self, empleado: Empleado) -> None:
-        pass
-
-    def reasignar_empleado(self, empleado: Empleado, departamento: Departamento) -> None:
-        pass
-

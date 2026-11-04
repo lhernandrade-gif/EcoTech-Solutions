@@ -42,9 +42,3 @@ class Empleado:
         except ValueError as e:
             logging.exception(e)
             raise
-
-    def obtener_datos_contacto(self) -> dict:
-        pass
-
-    def registrar_horas(self, registro: RegistroTiempo) -> None:
-        pass

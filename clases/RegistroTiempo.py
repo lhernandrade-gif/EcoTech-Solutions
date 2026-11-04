@@ -14,6 +14,3 @@ class RegistroTiempo:
         self.descripcion_tareas = descripcion_tareas
         self.empleado_id = empleado_id
         self.proyecto_id = proyecto_id
-
-    def obtener_resumen(self):
-        pass

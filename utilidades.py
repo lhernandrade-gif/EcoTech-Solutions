@@ -123,13 +123,4 @@ def validar_monto(monto: str) -> bool:
     except InvalidOperation:
         return False
 
-def control_excepciones_api(excepcion) -> str:
-    pass
-
-def generar_informe():
-    pass
-
-def exportar_informe():
-    pass
-
 
