@@ -75,6 +75,10 @@ class EcoTechApp:
         from .gestion_registros import abrir_eliminar
         abrir_eliminar(self)
 
+    def abrir_herramientas(self):
+        from .herramientas import abrir_herramientas
+        abrir_herramientas(self)
+
     def abrir_informe(self):
         from .informes import abrir_informe
         abrir_informe(self)

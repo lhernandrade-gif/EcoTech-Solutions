@@ -6,18 +6,26 @@ def construir_menu(app):
     contenedor = ttk.Frame(app.root, padding=(42, 30, 42, 22))
     contenedor.pack(fill="both", expand=True)
 
+    cabecera = ttk.Frame(contenedor)
+    cabecera.pack(fill="x", pady=(0, 24))
+    titulos = ttk.Frame(cabecera)
+    titulos.pack(side="left", fill="x", expand=True)
     ttk.Label(
-        contenedor, text="ECOTECH  /  OPERACIONES", font=("Segoe UI", 9, "bold"),
+        titulos, text="ECOTECH  /  OPERACIONES", font=("Segoe UI", 9, "bold"),
         foreground="#528064"
     ).pack(anchor="w", pady=(0, 8))
     ttk.Label(
-        contenedor, text="Gestión de equipo y proyectos", style="Titulo.TLabel"
+        titulos, text="Gestión de equipo y proyectos", style="Titulo.TLabel"
     ).pack(anchor="w")
     ttk.Label(
-        contenedor,
+        titulos,
         text="Administra empleados, departamentos, proyectos y horas de trabajo.",
         style="Subtitulo.TLabel"
-    ).pack(anchor="w", pady=(8, 24))
+    ).pack(anchor="w", pady=(8, 0))
+    ttk.Button(
+        cabecera, text="Herramientas", style="Secundaria.TButton",
+        command=app.abrir_herramientas
+    ).pack(side="right", anchor="n", padx=(16, 0), pady=8)
 
     ttk.Label(contenedor, text="¿Qué necesitas hacer?", style="Seccion.TLabel").pack(
         anchor="w", pady=(0, 12)
